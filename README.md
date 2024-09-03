@@ -1,8 +1,12 @@
-# Nuxt 3 Minimal Starter
+# Nuxt 3 (Domain-driven Design)
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This project is powered by Nuxt3.
 
 ## Setup
+
+> This project uses `npm` by default, but you can use other package manager like `pnpm` if preferred.
+
+### 1. Install Dependecies
 
 Make sure to install the dependencies:
 
@@ -19,6 +23,24 @@ yarn install
 # bun
 bun install
 ```
+
+### 2. Setup .gitattributes
+
+This project uses `husky` and `lint-staged` to handle precommit config to fix eslint issue.
+However, `pre-commit` bash file may cause error when committing due to incorrect file ending when different OS
+is used for development (Windows and UNIX-based) which may cause these files to be treated incorrectly.
+
+To prevent these issues, create `.gitattributes` file in root dir of this project with the settings below:
+
+```bash
+* text=auto eol=lf # This line allows files without extension (such as runnable files for husky) to have proper line ending and not tripping any error due to incorrect line-ending (depending on OS and/or IDE, git EOL setting might default to CRLF, which may cause some commands to throw error)
+*.* -eol # This line revert back the EOL to whatever default is for any files with extension 
+
+# Add any specific overrides for specific extensions below
+#*.py eol=lf # This line override EOL for .py to LF
+```
+
+> This file is intentionally ignored in `.gitignore` because committing this file will throw warning from git.
 
 ## Development Server
 
