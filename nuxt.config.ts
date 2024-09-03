@@ -10,4 +10,14 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  // ========================================
+  // setup env
+  // ========================================
+
+  runtimeConfig: {
+    public: {
+      enableMock: process.env.ENABLE_MOCK || false,
+    },
+  },
 });
