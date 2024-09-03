@@ -15,6 +15,7 @@
   "dependencies": {
     "@nuxt/eslint": "^0.5.5",
     "@nuxtjs/tailwindcss": "^6.12.1",
+    "@pinia/nuxt": "^0.5.4",
     "nuxt": "^3.13.0",
     "vue": "latest"
   },
@@ -36,5 +37,8 @@
     "plugins/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
     "stores/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
     "utils/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix"
+  },
+  "overrides": {
+    "vue": "latest"
   }
 }
