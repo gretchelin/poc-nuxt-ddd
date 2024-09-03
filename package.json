@@ -19,7 +19,21 @@
   },
   "devDependencies": {
     "husky": "^9.1.5",
+    "lint-staged": "^15.2.10",
     "typescript": "^5.5.4",
     "vue-tsc": "^2.1.4"
+  },
+  "lint-staged": {
+    "*.vue": "npm run lint:fix",
+    "components/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "composables/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "config/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "layouts/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "middleware/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "mocks/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "pages/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "plugins/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "stores/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "utils/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix"
   }
 }
