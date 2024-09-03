@@ -1,0 +1,8 @@
+# This line allows files without extension (such as runnable files for husky) to have proper line ending and not tripping any error due to incorrect line-ending (depending on OS and/or IDE, git EOL setting might default to CRLF, which may cause some commands to throw error)
+* text=auto eol=lf
+
+# This line revert back the EOL to whatever default is for any files with extension
+*.* -eol
+
+#  Add any specific overrides for specific extensions below
+#*.py eol=lf # This line override EOL for .py to LF

@@ -24,7 +24,7 @@ logs
 !.env.example
 
 # Git config
-.gitattributes
+#.gitattributes
 
 # Sonarqube
 .sonarscanner
