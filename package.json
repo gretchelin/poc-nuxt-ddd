@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "typecheck": "nuxi typecheck",
+    "lint:fix": "eslint --fix",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
@@ -11,10 +13,13 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@nuxt/eslint": "^0.5.5",
     "nuxt": "^3.13.0",
     "vue": "latest"
   },
   "devDependencies": {
-    "husky": "^9.1.5"
+    "husky": "^9.1.5",
+    "typescript": "^5.5.4",
+    "vue-tsc": "^2.1.4"
   }
 }
