@@ -5,7 +5,16 @@ export default defineNuxtConfig({
   ],
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/icon', '@vueuse/nuxt', '@nuxt/fonts', '@vee-validate/nuxt'],
+  modules: [
+    '@nuxt/eslint',
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    '@nuxt/icon',
+    '@vueuse/nuxt',
+    '@nuxt/fonts',
+    '@vee-validate/nuxt',
+    '@sidebase/nuxt-auth',
+  ],
   eslint: {
     config: {
       stylistic: {
@@ -56,6 +65,23 @@ export default defineNuxtConfig({
     public: {
       enableMock: process.env.ENABLE_MOCK || false,
     },
+  },
+
+
+  // ========================================
+  // setup auth
+  // ========================================
+
+  auth: {
+    isEnabled: false,
+    disableServerSideAuth: false,
+    originEnvKey: 'AUTH_ORIGIN',
+    baseURL: 'http://localhost:3000/api/auth',
+    provider: { /* your provider config */ },
+    sessionRefresh: {
+      enablePeriodically: true,
+      enableOnWindowFocus: true,
+    }
   },
 
   // ========================================
