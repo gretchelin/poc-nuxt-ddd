@@ -6,9 +6,9 @@ This project is powered by Nuxt3.
 
 > This project uses `npm` by default, but you can use other package manager like `pnpm` if preferred.
 
-### 1. Install Dependecies
+### 1. Install Dependencies
 
-Make sure to install the dependencies:
+Make sure to install the dependencies. This project uses `npm`, but it should work with other package manager.
 
 ```bash
 # npm
@@ -24,26 +24,10 @@ yarn install
 bun install
 ```
 
-### 2. Setup .gitattributes
+### 2. Running the project
 
-This project uses `husky` and `lint-staged` to handle precommit config to fix eslint issue.
-However, `pre-commit` bash file may cause error when committing due to incorrect file ending when different OS
-is used for development (Windows and UNIX-based) which may cause these files to be treated incorrectly.
 
-To prevent these issues, create `.gitattributes` file in root dir of this project with the settings below:
-
-```bash
-* text=auto eol=lf # This line allows files without extension (such as runnable files for husky) to have proper line ending and not tripping any error due to incorrect line-ending (depending on OS and/or IDE, git EOL setting might default to CRLF, which may cause some commands to throw error)
-*.* -eol # This line revert back the EOL to whatever default is for any files with extension 
-
-# Add any specific overrides for specific extensions below
-#*.py eol=lf # This line override EOL for .py to LF
-```
-
-> This file is intentionally ignored in `.gitignore` because committing this file will throw warning from git.
-
-## Development Server
-
+#### Development
 Start the development server on `http://localhost:3000`:
 
 ```bash
@@ -60,8 +44,7 @@ yarn dev
 bun run dev
 ```
 
-## Production
-
+#### Production
 Build the application for production:
 
 ```bash
@@ -95,3 +78,33 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+
+## Dockerize Project
+
+Make sure beforehand that proper `Dockerfile` has been setup.
+
+> `docker build -t maximus-cms-img .`
+
+Build docker image
+
+> `docker run -it -p 3000:3000 --rm --name maximus-cms maximus-cms-img`
+
+Run project in docker container
+
+
+## Sonarqube
+
+To run sonar scanner locally (in docker), you can run this command from the command line. Make sure that current path is
+the root of this project!
+
+```docker
+docker run -it  -e SONAR_HOST_URL="http://localhost:9000"  -e SONAR_SCANNER_OPTS="-Dsonar.projectKey=mdl-cms -Dsonar.login=admin -Dsonar.password=password"  -v "$(pwd):/usr/src"  --net=host --name=sonarscanner-maximus-cms sonarsource/sonar-scanner-cli
+```
+
+Replace `SONAR_HOST_URL` with your local sonar installation url, `sonar.login` and `sonar.password` with your local
+sonar installation login credential.
+
+The command above is meant to be run on UNIX systems. If using Windows (Powershell), replace the `$(pwd)` with `%cd%`
+to get current directory. Or replace that with absolute path if you're running the command not from the root of
+this project.
