@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   ],
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/icon', '@vueuse/nuxt'],
+  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/icon', '@vueuse/nuxt', '@nuxt/fonts'],
   eslint: {
     config: {
       stylistic: {
@@ -14,6 +14,18 @@ export default defineNuxtConfig({
     },
   },
 
+
+  // ========================================
+  // set up fonts
+  // ========================================
+
+  fonts: {
+    // define font options
+    // https://fonts.nuxt.com/get-started/configuration#families
+    families: [
+      { name: 'Inter', provider: 'google' },
+    ]
+  },
 
   // ========================================
   // set up icon
