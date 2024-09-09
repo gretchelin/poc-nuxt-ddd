@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   ],
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/icon', '@vueuse/nuxt', '@nuxt/fonts'],
+  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/icon', '@vueuse/nuxt', '@nuxt/fonts', '@vee-validate/nuxt'],
   eslint: {
     config: {
       stylistic: {
