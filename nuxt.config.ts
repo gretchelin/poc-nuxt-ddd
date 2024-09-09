@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   ],
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@pinia/nuxt'],
+  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/icon'],
   eslint: {
     config: {
       stylistic: {
@@ -13,6 +13,28 @@ export default defineNuxtConfig({
       },
     },
   },
+
+
+  // ========================================
+  // set up icon
+  // ========================================
+
+  icon: {
+    serverBundle: {
+      // explicitly define which icon package will be bundled and served from our server
+      // https://nuxt.com/modules/icon#iconify-dataset
+      collections: ['uil', 'mdi'],
+    },
+    // define custom icon settings, must set `ssr: true` or set `provider: "server"` under `icon` setting
+    // https://nuxt.com/modules/icon#custom-local-collections
+    customCollections: [
+      {
+        prefix: 'mdl',
+        dir: './core/assets/icons'
+      },
+    ],
+  },
+
 
   // ========================================
   // setup env
