@@ -13,9 +13,6 @@ export default withNuxt({
       },
     }],
     "vue/multi-word-component-names": "off", // turning this off because nuxt pages may have single-word "component"
-    // "vue/multi-word-component-names": ["error", {
-    //   "ignores": ['index', 'default']
-    // }],
     'vue/first-attribute-linebreak': ['error', {
       singleline: 'ignore', multiline: 'below',
     }],
