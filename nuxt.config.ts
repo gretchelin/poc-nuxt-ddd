@@ -32,6 +32,7 @@ export default defineNuxtConfig({
   alias: {
     // layer-level aliases (prefixed with a `#`)
     '#core': '/core',
+    '#playground': '~/layers/playground',
 
     // core
     '~/components': '/core/components',
@@ -63,6 +64,11 @@ export default defineNuxtConfig({
       path: '~/core/components',
       prefix: 'Core',
       global: true,
+    },
+    {
+      path: '#playground/components',
+      pathPrefix: false,
+      global: false,
     },
   ],
 });
