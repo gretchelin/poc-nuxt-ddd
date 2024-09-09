@@ -23,6 +23,7 @@
     "@vee-validate/yup": "^4.13.2",
     "@vueuse/core": "^11.0.3",
     "@vueuse/nuxt": "^11.0.3",
+    "dayjs": "^1.11.13",
     "nuxt": "^3.13.0",
     "vue": "latest",
     "yup": "^1.4.0"
