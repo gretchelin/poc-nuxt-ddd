@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   extends: [
     './core',
   ],
+  ssr: true,
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   modules: [

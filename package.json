@@ -27,6 +27,7 @@
     "@vueuse/nuxt": "^11.0.3",
     "dayjs": "^1.11.13",
     "floating-vue": "^5.2.2",
+    "maska": "^3.0.2",
     "nuxt": "^3.13.0",
     "vue": "latest",
     "yup": "^1.4.0"
