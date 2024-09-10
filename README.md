@@ -26,8 +26,8 @@ bun install
 
 ### 2. Running the project
 
-
 #### Development
+
 Start the development server on `http://localhost:3000`:
 
 ```bash
@@ -45,6 +45,7 @@ bun run dev
 ```
 
 #### Production
+
 Build the application for production:
 
 ```bash
@@ -79,32 +80,34 @@ bun run preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
-
 ## Dockerize Project
 
 Make sure beforehand that proper `Dockerfile` has been setup.
 
-> `docker build -t maximus-cms-img .`
+ ```bash
+ docker build -t nuxt-ddd-img .
+ ```
 
 Build docker image
 
-> `docker run -it -p 3000:3000 --rm --name maximus-cms maximus-cms-img`
+```bash
+docker run -it -p 3000:3000 --rm --name nuxt-ddd nuxt-ddd-img
+```
 
 Run project in docker container
 
-
 ## Sonarqube
 
-To run sonar scanner locally (in docker), you can run this command from the command line. Make sure that current path is
-the root of this project!
+To run sonar scanner locally (in docker), you can run this command from the command line. 
 
-```docker
-docker run -it  -e SONAR_HOST_URL="http://localhost:9000"  -e SONAR_SCANNER_OPTS="-Dsonar.projectKey=mdl-cms -Dsonar.login=admin -Dsonar.password=password"  -v "$(pwd):/usr/src"  --net=host --name=sonarscanner-maximus-cms sonarsource/sonar-scanner-cli
+> ⚠️ Make sure that current path is the root of this project and you have installed `SonarScanner CLI` in docker!
+
+```bash
+docker run -it  -e SONAR_HOST_URL="http://localhost:9000"  -e SONAR_SCANNER_OPTS="-Dsonar.projectKey=nuxt-ddd -Dsonar.login=admin -Dsonar.password=password"  -v "$(pwd):/usr/src"  --net=host --name=sonarscanner-nuxt-ddd sonarsource/sonar-scanner-cli
 ```
 
-Replace `SONAR_HOST_URL` with your local sonar installation url, `sonar.login` and `sonar.password` with your local
-sonar installation login credential.
+> ℹ️ 
+> - Replace `SONAR_HOST_URL` with your local sonar installation url.
+> - Replace `sonar.login` and `sonar.password` with your local sonar installation login credential. Or you can use `-Dsonar.token=<generated_token>` instead of login cred
 
-The command above is meant to be run on UNIX systems. If using Windows (Powershell), replace the `$(pwd)` with `%cd%`
-to get current directory. Or replace that with absolute path if you're running the command not from the root of
-this project.
+Official info related to sonarscanner can be read [here](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/scanners/sonarscanner/#sonarscanner-from-docker-image).

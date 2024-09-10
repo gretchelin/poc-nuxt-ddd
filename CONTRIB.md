@@ -15,21 +15,26 @@ instead of module.
 
 ```
 .
-├── core                        # Core project settings
+├── core                        # Core project (shared setup)
 │   ├── components              # Common components shared by domains
 │   ├── composables             # Common composables shared by domains     
 │   ├── layouts                 # Common layout shared by domains     
 │   ├── plugins                 # Common plugins shared by domains     
 │   ├── public                  # Public assets served at server root     
-│   └── stores                  # Common store shared by domains     
+│   ├── stores                  # Common store shared by domains
+│   └── nuxt.config.ts          # (Required) Core-specific nuxt config      
+├── ui                          # UI library project
+│   ├── components              # Common components shared by domains
+│   └── nuxt.config.ts          # (Required) UI-specific nuxt config      
 ├── layers                      # Domain-based project holder
-│   └── <domain_name>           # Domain-bsaed project
+│   └── <domain_name>           # Domain-bsaed project (feature-based)
 │       ├── components          # Domain-specific components
 │       ├── pages               # Domain-specific pages
 │       │   └── <domain_path>   # Domain-specific base path (ie. domain.com/<domain_path>/)
 │       ├── config              # Domain-specific config (constants, flags, etc)     
-│       └── nuxt.config.ts      # (Required) Domain-specific nuxt config.      
+│       └── nuxt.config.ts      # (Required) Domain-specific nuxt config      
 ├── public                      # Public assets served at server root
+├── nuxt.config.ts              # Root nuxt config      
 └── README.md
 ```
 
