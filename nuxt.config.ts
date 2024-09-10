@@ -1,7 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   extends: [
-    './core',
+      './core',
+      './ui',
   ],
   ssr: true,
   compatibilityDate: '2024-04-03',
@@ -95,6 +96,7 @@ export default defineNuxtConfig({
     // layer-level aliases (prefixed with a `#`)
     '#core': '/core',
     '#playground': '~/layers/playground',
+    '#ui': '/ui',
 
     // core
     '~/components': '/core/components',
@@ -121,16 +123,22 @@ export default defineNuxtConfig({
   ],
 
   // define layers components path config here
+  // relative path must use `~` as base
   components: [
+    {
+      path: '~/layers/playground/components',
+      pathPrefix: false,
+      global: false,
+    },
     {
       path: '~/core/components',
       prefix: 'Core',
       global: true,
     },
     {
-      path: '#playground/components',
-      pathPrefix: false,
-      global: false,
+      path: '~/ui/components',
+      prefix: 'Ui',
+      global: true,
     },
   ],
 });
