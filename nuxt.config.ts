@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@vee-validate/nuxt',
     '@sidebase/nuxt-auth',
+    'floating-vue/nuxt',
   ],
   eslint: {
     config: {
