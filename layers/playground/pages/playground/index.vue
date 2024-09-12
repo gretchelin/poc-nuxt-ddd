@@ -48,17 +48,31 @@
         :key="entry?.name || idx"
         :title="entry?.name"
       >
-        <div>
-          <a
-            v-tooltip="`Edit`"
-            class="inline-block"
-            :href="`/playground/form/${entry?.name}`"
-          >
-            <Icon
-              name="mdi:edit"
-              mode="svg"
-            />
-          </a>
+        <div class="flex gap-2">
+          <div>
+            <a
+              v-tooltip="`Edit`"
+              class="inline-block"
+              :href="`/playground/form/${entry?.name}`"
+            >
+              <Icon
+                name="mdi:edit"
+                mode="svg"
+              />
+            </a>
+          </div>
+          <div>
+            <a
+              v-tooltip="`View`"
+              class="inline-block"
+              :href="`/playground/detail/${entry?.name}`"
+            >
+              <Icon
+                name="mdi:eye"
+                mode="svg"
+              />
+            </a>
+          </div>
         </div>
       </EntryCard>
     </template>
