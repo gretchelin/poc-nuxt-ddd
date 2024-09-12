@@ -33,6 +33,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.0.0",
     "husky": "^9.1.5",
     "lint-staged": "^15.2.10",
     "msw": "^2.4.1",
