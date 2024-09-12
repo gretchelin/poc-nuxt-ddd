@@ -78,16 +78,16 @@
 </template>
 
 <script lang="ts">
-export default {
-  name: 'PlaygroundPageForm'
-}
-</script>
-
-<script setup lang="ts">
-import { useForm, ErrorMessage } from 'vee-validate';
+import { useForm } from 'vee-validate';
 import { object, string, number } from 'yup';
 import { toTypedSchema } from '@vee-validate/yup';
 
+export default {
+  name: 'PlaygroundPageForm',
+};
+</script>
+
+<script setup lang="ts">
 // types
 
 // const
@@ -147,7 +147,7 @@ const onSubmit = handleSubmit((values) => {
 });
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 code {
   @apply bg-neutral-100 px-1 py-0.5 rounded;
 }
