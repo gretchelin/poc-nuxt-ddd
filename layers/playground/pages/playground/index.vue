@@ -72,6 +72,7 @@ import EntryCard from '#playground/components/EntryCard.vue';
 // Page Setup
 definePageMeta({
   layout: 'full',
+  middleware: ['playground'],
 });
 
 // Data
