@@ -88,6 +88,10 @@ export default {
 </script>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: ['playground'],
+});
+
 // types
 
 // const
