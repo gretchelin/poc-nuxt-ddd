@@ -1,19 +1,25 @@
 <template>
-  <div data-teid="entry-card" class="entry-card">
+  <section
+    v-tooltip="'this component exist in playground feature'"
+    data-teid="entry-card"
+    class="entry-card"
+  >
     <div v-if="icon">
-      <Icon :name="icon" mode="svg"/>
+      <Icon
+        :name="icon"
+        mode="svg"
+      />
     </div>
     <div>
-      <h2 class="text-xs text-neutral-400 mb-2 font-light">
-        this component exist in playground feature
-      </h2>
-      <h1>{{ title }}</h1>
+      <h1 class="font-semibold capitalize">
+        {{ title }}
+      </h1>
 
       <div class="empty:display-none">
-        <slot/>
+        <slot />
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -29,6 +35,6 @@ withDefaults(defineProps<Props>(), {
 
 <style lang="postcss" scoped>
 .entry-card {
-  @apply p-3 border rounded flex gap-4;
+  @apply p-3 border rounded flex gap-4 hover:border-cyan-800;
 }
 </style>
