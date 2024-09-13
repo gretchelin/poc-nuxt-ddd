@@ -1,7 +1,7 @@
 # Env setup
 ARG NODE_VERSION=22.8.0
 
-FROM node:${NODE_VERSION}-alpine as base
+FROM node:${NODE_VERSION}-alpine AS base
 
 # By default, if PORT is not defined, Nuxt uses port 3000
 ARG PORT=3000
@@ -11,15 +11,14 @@ ENV NODE_ENV=production
 WORKDIR /src
 
 # Build
-FROM base as build
+FROM base AS build
 
-COPY --link package.json package-lock.json .
+COPY --link package.json package-lock.json ./
 RUN npm install --production=false
 
 COPY --link . .
 
-RUN npm run build
-RUN npm prune
+RUN npm run build && npm prune
 
 # Run
 FROM base
