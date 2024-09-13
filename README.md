@@ -1,5 +1,7 @@
 # Nuxt 3 (Domain-driven Design)
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gretchelin_poc-nuxt-ddd&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gretchelin_poc-nuxt-ddd)
+
 This project is powered by Nuxt3.
 
 ## Setup
