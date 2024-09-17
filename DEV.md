@@ -1,17 +1,21 @@
 # Development Notes
 
 <!-- TOC -->
+
 * [Development Notes](#development-notes)
-  * [Quirks](#quirks)
-    * [`pages` contains page files but the page cannot be accessed in url](#pages-contains-page-files-but-the-page-cannot-be-accessed-in-url)
-    * [`error  <script setup> cannot contain ES module exports  vue/no-export-in-script-setup` when committing files](#error--script-setup-cannot-contain-es-module-exports--vueno-export-in-script-setup-when-committing-files)
+    * [Quirks](#quirks)
+        * [`pages` contains page files but the page cannot be accessed in url](#pages-contains-page-files-but-the-page-cannot-be-accessed-in-url)
+        * [`error  <script setup> cannot contain ES module exports  vue/no-export-in-script-setup` when committing files](#error--script-setup-cannot-contain-es-module-exports--vueno-export-in-script-setup-when-committing-files)
+        * [Service worker not being installed when `devServer.host` is set up in `nuxt.config.ts`](#service-worker-not-being-installed-when-devserverhost-is-set-up-in-nuxtconfigts)
+    * [Changelog](#changelog)
+
 <!-- TOC -->
 
 ## Quirks
 
 ### `pages` contains page files but the page cannot be accessed in url
 
-As noted in https://nuxt.com/docs/guide/going-further/layers.
+As noted in [Nuxt Layer Docs](https://nuxt.com/docs/guide/going-further/layers.)
 
 > A minimal Nuxt layer directory should contain a nuxt.config.ts file to indicate it is a layer.
 
@@ -74,7 +78,7 @@ A correct vue file is like the one below:
 
 <script lang="ts">
   import {ref} from 'vue';
-  
+
   export default {
     inhertiAttrs: false
   }
@@ -84,3 +88,103 @@ A correct vue file is like the one below:
   const title = ref('Default Title');
 </script>
 ```
+
+### Service worker not being installed when `devServer.host` is set up in `nuxt.config.ts`
+
+Service Workers requires HTTPS to work despite being enabled in modern browsers by default, as noted
+in [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers#setting_up_to_play_with_service_workers).
+
+> Service workers are enabled by default in all modern browsers. To run code using service workers, you'll need to serve
+> your code via HTTPS — Service workers are restricted to running across HTTPS for security reasons. A server supporting
+> HTTPS is necessary. To host experiments, you can use a service such as GitHub, Netlify, Vercel, etc. In order to
+> facilitate local development, localhost is considered a secure origin by browsers as well.
+>
+> (*Excerpt taken from the link above for posterity's sake*)
+
+As such, for local development purposes, service workers will **ONLY** be automatically installed if the project is
+accessed through `http://localhost`.
+
+If proxy is desired, then additional action must be done because we need to access the local proxy as https. To enable
+HTTPS access to local proxy, follow the steps below:
+
+1. Setup dev server setting in `nuxt.config.ts` ([Official docs](https://nuxt.com/docs/api/nuxt-config#devserver))
+
+```typescript
+export default defineNuxtConfig({
+    // ...other nuxt config
+    devServer: {
+        host: 'myprodydoma.in',
+        https: {
+            key: './myproxydoma.in-key.pem',
+            cert: './myproxydoma.in.pem',
+        },
+    },
+});
+```
+
+2. Install `mkcert` to generate certificate for HTTPS access ([Official docs](https://github.com/FiloSottile/mkcert))
+
+> ℹ️ If using WSL, install `mkcert` in windows, not WSL!
+
+3. Run the command below in command line (powershell if Windows) to locally register the certificate we are going to
+   make automatically
+
+ ```bash
+ mkcert -install
+ ```
+
+4. Generate the certificate for our proxy. This will create the certificate in the dir the command was run.
+
+ ```bash
+ mkcert myproxydoma.in
+ ```
+
+5. Copy the cert to root project. (If the file is copied to another dir, the path set in step 1 must be adjusted to
+   match the files location).
+6. Run the project and access it from `https://myproxydoma.in` and service workers will be installed.
+
+> **One thing to note though**, setting `https` value in `devServer` would make the project only accessible
+> through `https`
+> protocol, thus make `http` no longer accessible.
+> _Accessing `https://localhost:3000` requires another certificate to be generated and registered._
+
+### Auth middleware for protecting page does not work.
+
+This project uses `@sidebase/nuxt-auth` and according to the
+official [docs](https://auth.sidebase.io/guide/application-side/configuration#globalappmiddleware)
+regarding `globalAppMiddleware` configuration:
+
+> - If you enable this, everything is going to be protected and you can selectively disable protection for some pages by
+    > specifying `definePageMeta({ auth: false })`
+> - If you disable this, everything is going to be public and you can selectively enable protection for some pages by
+    > specifying `definePageMeta({ auth: true })`
+>
+> _(Excerpt taken from official doc for posterity's sake)_
+
+However, it may not work for all cases -if not misleading-. For example, the code as of 17/09/2024 won't work without
+explicitly adding `auth` to `middleware` prop.
+
+```vue
+
+<script setup lang="ts">
+  definePageMeta({
+    // middleware: ['auth'],  // ===> need this for auth setting to work!
+    auth: {
+      unauthenticatedOnly: true,
+      navigateAuthenticatedTo: '/profile'
+    }
+  })
+</script>
+```
+
+This project set `globalAppMiddleware` to `false`, which is the default. Thus, in order to utilize `@sidebase/nuxt-auth`
+page protection feature, explicitly adding `auth` middleware is preferred: `definePageMeta({ middleware: ['auth']` to
+ensure that page protection is working.
+
+## Changelog
+
+| Date       | Author | Notes                                                                                                                                            |
+|------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| 17-09-2024 | Gretta | Added Service worker not being installed when `devServer.host` is set up in `nuxt.config.ts`, Auth middleware for protecting page does not work. |
+| 12-09-2024 | Gretta | Added `error  <script setup> cannot contain ES module exports  vue/no-export-in-script-setup` when committing files                              |
+| 09-09-2024 | Gretta | Added `pages` contains page files but the page cannot be accessed in url                                                                         |

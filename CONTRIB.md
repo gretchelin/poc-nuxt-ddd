@@ -1,17 +1,18 @@
 # Contribution Guideline
 
 <!-- TOC -->
+
 * [Contribution Guideline](#contribution-guideline)
     * [Folder structure](#folder-structure)
     * [Working on new feature](#working-on-new-feature)
     * [Updating eslint rules](#updating-eslint-rules)
+
 <!-- TOC -->
 
 ### Folder structure
 
 This project is using domain-based directory architecture. As such, it utilizes Nuxt3 `Layer` concept to encapsulate
-code
-instead of module.
+code instead of module.
 
 ```
 .
@@ -57,7 +58,7 @@ npx nuxi init --template layer layers/<layer_project_name>
 > server manually if making any changess to nuxt config or app config to prevent working on obsolete setup
 
 
-> :info: Running the command in step 1 is optional. You can also manually create each folders as needed,
+> ℹ️ Running the command in step 1 is optional. You can also manually create each folders as needed,
 >
 > ie. when working with feature A, we only needed components and pages. We could just make folder `FeatureA`
 > under `layers` and also `components` and `pages` under `FeatureA`.
@@ -66,7 +67,7 @@ npx nuxi init --template layer layers/<layer_project_name>
 
 ### Updating eslint rules
 
-When you are updating eslint config, make sure to commit the change on its own (not mixed with other files) as in order
+When updating eslint config, make sure to commit the change on its own (not mixed with other files) as in order
 for it to have an effect, devs may need to clear installed packaged and reinstall them.
 
 You can run the command below (assuming on UNIX-based OS and using `npm` as package manager)
@@ -74,4 +75,10 @@ You can run the command below (assuming on UNIX-based OS and using `npm` as pack
  ```bash
  rm -rf node_modules && npm i
 ```
+
+## Changelog
+
+| Date       | Author | Notes                                                                                                               |
+|------------|--------|---------------------------------------------------------------------------------------------------------------------|
+| 03-09-2024 | Gretta | Added `Folder Structure`, `Working on new feature`, `Updating eslint rules`                                         |
 
