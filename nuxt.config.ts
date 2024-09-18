@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@sidebase/nuxt-auth',
     'floating-vue/nuxt',
+    '@sentry/nuxt/module',
   ],
   eslint: {
     config: {
@@ -26,6 +27,18 @@ export default defineNuxtConfig({
     },
   },
 
+
+  // ========================================
+  // set up sentry
+  // ========================================
+
+  sentry: {
+    sourceMapsUploadOptions: {
+      org: process.env.NUXT_SENTRY_ORG,
+      project: process.env.NUXT_SENTRY_PROJECT,
+      authToken: process.env.NUXT_SENTRY_TOKEN,
+    },
+  },
 
   // ========================================
   // set up fonts
