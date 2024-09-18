@@ -45,16 +45,16 @@
   },
   "lint-staged": {
     "*.vue": "npm run lint:fix",
-    "components/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
-    "composables/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
-    "config/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
-    "layouts/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
-    "middleware/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
-    "mocks/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
-    "pages/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
-    "plugins/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
-    "stores/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
-    "utils/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix"
+    "**/components/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "**/composables/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "**/config/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "**/layouts/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "**/middleware/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "**/mocks/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "**/pages/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "**/plugins/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "**/stores/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix",
+    "**/utils/**/*.{vue,js,jsx,ts,tsx,md,html,css}": "npm run lint:fix"
   },
   "overrides": {
     "vue": "latest"
