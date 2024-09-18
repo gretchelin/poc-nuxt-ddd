@@ -79,7 +79,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      enableMock: process.env.ENABLE_MOCK || false,
+      enableMock: process.env.NUXT_PUBLIC_ENABLE_MOCK,
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL,
     },
   },
 
