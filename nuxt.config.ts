@@ -27,6 +27,13 @@ export default defineNuxtConfig({
     },
   },
 
+  // ========================================
+  // set up pinia
+  // ========================================
+
+  pinia: {
+    storesDirs: ['./layers/**/stores/**', './core/stores/**'],
+  },
 
   // ========================================
   // set up sentry
