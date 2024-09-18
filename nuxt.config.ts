@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     '@sidebase/nuxt-auth',
     'floating-vue/nuxt',
     '@sentry/nuxt/module',
+    '@nuxt/test-utils/module',
   ],
   eslint: {
     config: {
