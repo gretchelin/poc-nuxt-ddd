@@ -7,6 +7,8 @@
         * [`pages` contains page files but the page cannot be accessed in url](#pages-contains-page-files-but-the-page-cannot-be-accessed-in-url)
         * [`error  <script setup> cannot contain ES module exports  vue/no-export-in-script-setup` when committing files](#error--script-setup-cannot-contain-es-module-exports--vueno-export-in-script-setup-when-committing-files)
         * [Service worker not being installed when `devServer.host` is set up in `nuxt.config.ts`](#service-worker-not-being-installed-when-devserverhost-is-set-up-in-nuxtconfigts)
+        * [Auth middleware for protecting page does not work.](#auth-middleware-for-protecting-page-does-not-work)
+        * [Sentry not logging issue in development env](#sentry-not-logging-issue-in-development-env)
     * [Changelog](#changelog)
 
 <!-- TOC -->
@@ -181,10 +183,29 @@ This project set `globalAppMiddleware` to `false`, which is the default. Thus, i
 page protection feature, explicitly adding `auth` middleware is preferred: `definePageMeta({ middleware: ['auth']` to
 ensure that page protection is working.
 
+### Sentry not logging issue in development env
+
+This project uses sentry's official Nuxt SDK -`@sentry/nuxt`- that is as of 18/09/2024 is still considered *
+*experimental and in alpha
+state**. As inferred in the official docs setup [here](https://docs.sentry.io/platforms/javascript/guides/nuxt/), Sentry
+will only be enabled on production build (by either running `npm run preview` or `npm run start`) and thus requires the
+project to be build first (by running `npm run build`).
+
+As such, when working in this project by running `npm run dev`, Sentry will not log anything.
+
+> It was noticed in this project that when running `npm run preview`, `instrument.server.mjs` file must be put in
+> root `public` folder, otherwise, path resolution will be wrong and command will throw an error that it cannot find the
+> file.
+>
+> On the other hand, running with `npm run start` with correctly generated build (`instrument.server.mjs` is located
+> in `.output/public`), for some reason does not trigger Sentry to log events, despite running in `preview` trigger
+> Sentry to log events just fine.
+
 ## Changelog
 
 | Date       | Author | Notes                                                                                                                                            |
 |------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| 18-09-2024 | Gretta | Added Sentry not logging issue in development env.                                                                                               |
 | 17-09-2024 | Gretta | Added Service worker not being installed when `devServer.host` is set up in `nuxt.config.ts`, Auth middleware for protecting page does not work. |
 | 12-09-2024 | Gretta | Added `error  <script setup> cannot contain ES module exports  vue/no-export-in-script-setup` when committing files                              |
 | 09-09-2024 | Gretta | Added `pages` contains page files but the page cannot be accessed in url                                                                         |
