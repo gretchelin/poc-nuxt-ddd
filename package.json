@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "analyze:bundle": "nuxi analyze",
     "typecheck": "nuxi typecheck",
     "lint:fix": "eslint --fix",
     "build": "nuxt build",
