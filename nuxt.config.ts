@@ -1,8 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   extends: [
-      './core',
-      './ui',
+    './core',
+    './ui',
   ],
   ssr: true,
   compatibilityDate: '2024-04-03',
@@ -24,6 +24,18 @@ export default defineNuxtConfig({
       stylistic: {
         semi: true,
       },
+    },
+  },
+
+  // ========================================
+  // set up dev server proxy
+  // ========================================
+
+  devServer: {
+    host: process.env.NUXT_APP_DEVSERVER_HOST,
+    https: {
+      key: './mydoma.in-key.pem',
+      cert: './mydoma.in.pem',
     },
   },
 
@@ -56,7 +68,7 @@ export default defineNuxtConfig({
     // https://fonts.nuxt.com/get-started/configuration#families
     families: [
       { name: 'Inter', provider: 'google' },
-    ]
+    ],
   },
 
   // ========================================
@@ -74,11 +86,10 @@ export default defineNuxtConfig({
     customCollections: [
       {
         prefix: 'mdl',
-        dir: './core/assets/icons'
+        dir: './core/assets/icons',
       },
     ],
   },
-
 
   // ========================================
   // setup env
@@ -91,21 +102,58 @@ export default defineNuxtConfig({
     },
   },
 
-
   // ========================================
   // setup auth
   // ========================================
 
   auth: {
-    isEnabled: false,
+    isEnabled: true,
     disableServerSideAuth: false,
-    originEnvKey: 'AUTH_ORIGIN',
-    baseURL: 'http://localhost:3000/api/auth',
-    provider: { /* your provider config */ },
-    sessionRefresh: {
-      enablePeriodically: true,
-      enableOnWindowFocus: true,
-    }
+    originEnvKey: 'NUXT_APP_BASE_URL',
+    // when setting `baseURL`, make sure it ends with `/`!
+    baseURL: process.env.NUXT_PUBLIC_AUTH_BASE_URL,
+    provider: {
+      type: 'local',
+      pages: {
+        login: '/auth/login',
+      },
+      endpoints: {
+        // RULE:
+        // when `path` is defined with starting `/`, it will use site as origin
+        // if `baseURL` is defined, and the target origin for the path, MAKE SURE to not start `path  with `/`.
+        // ie. `path: 'api/login'` will result in `<auth.baseURL>api/login
+        // while `path: '/api/login'` will result in `localhost:3000/api/login` (or the site's origin when deployed)
+        signIn: { path: '/api/login', method: 'post' },
+        signOut: { path: '/api/logout', method: 'post' },
+        signUp: { path: '/api/register', method: 'post' },
+        getSession: { path: '/api/session', method: 'get' },
+      },
+      refresh: {
+        isEnabled: false,
+      },
+      token: {
+        signInResponseTokenPointer: '/data/token',
+        type: 'Bearer',
+        cookieName: 'auth.token',
+        headerName: 'Authorization',
+        // maxAgeInSeconds: 3000,
+        // sameSiteAttribute: 'lax',
+        // cookieDomain: '',
+        // secureCookieAttribute: false,
+        // httpOnlyCookieAttribute: false,
+      },
+      session: {
+        dataType: {
+          user: 'Record<string, any>',
+          rbac: 'Record<string, boolean>[]',
+        },
+      },
+    },
+    // sessionRefresh: {
+    //   enablePeriodically: true,
+    //   enableOnWindowFocus: true,
+    // },
+    globalAppMiddleware: false,
   },
 
   // ========================================
@@ -118,6 +166,7 @@ export default defineNuxtConfig({
     '#core': '/core',
     '#playground': '~/layers/playground',
     '#ui': '/ui',
+    '#auth': '~/layers/auth',
 
     // core
     '~/components': '/core/components',
