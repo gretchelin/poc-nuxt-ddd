@@ -82,10 +82,11 @@
 <script setup lang="ts">
 import { useQueryClient, useQuery } from '@tanstack/vue-query';
 import EntryCard from '#playground/components/EntryCard.vue';
+import { usePlaygroundStore } from '#playground/stores/playground';
 
 // Page Setup
 definePageMeta({
-  layout: 'full',
+  layout: 'playground',
   middleware: ['playground'],
 });
 
@@ -95,6 +96,7 @@ const page = ref(1);
 const itemPerPage = ref(20);
 const pageTotal = ref(1);
 const total = ref(0);
+const playgroundStore = usePlaygroundStore();
 
 // Computed
 const itemRange = computed(() => {
@@ -128,6 +130,9 @@ const cancelFetch = () => {
 
 // lifecycle
 onMounted(() => {
+  playgroundStore.$patch({
+    pageRef: 'Playground Landing Page',
+  });
 });
 </script>
 
