@@ -24,6 +24,9 @@ logs
 .env.*
 !.env.example
 
+# Unit Testing
+**/test/coverage
+
 # Git config
 #.gitattributes
 
