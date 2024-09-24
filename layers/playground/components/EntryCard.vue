@@ -4,18 +4,27 @@
     data-teid="entry-card"
     class="entry-card"
   >
-    <div v-if="icon">
+    <div
+      v-if="icon"
+      data-teid="entry-card--icon"
+    >
       <Icon
         :name="icon"
         mode="svg"
       />
     </div>
     <div>
-      <h1 class="font-semibold capitalize">
+      <h1
+        class="font-semibold capitalize"
+        data-teid="entry-card--title"
+      >
         {{ title }}
       </h1>
 
-      <div class="empty:display-none">
+      <div
+        class="empty:display-none"
+        data-teid="entry-card--main"
+      >
         <slot />
       </div>
     </div>
@@ -24,8 +33,10 @@
 
 <script setup lang="ts">
 interface Props {
-  title: string;
+  title?: string;
   icon?: string;
+
+  [key: string]: any;
 }
 
 withDefaults(defineProps<Props>(), {
