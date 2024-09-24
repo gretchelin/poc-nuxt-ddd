@@ -1,16 +1,17 @@
 # Development Notes
 
 <!-- TOC -->
-
 * [Development Notes](#development-notes)
-    * [Quirks](#quirks)
-        * [`pages` contains page files but the page cannot be accessed in url](#pages-contains-page-files-but-the-page-cannot-be-accessed-in-url)
-        * [`error  <script setup> cannot contain ES module exports  vue/no-export-in-script-setup` when committing files](#error--script-setup-cannot-contain-es-module-exports--vueno-export-in-script-setup-when-committing-files)
-        * [Service worker not being installed when `devServer.host` is set up in `nuxt.config.ts`](#service-worker-not-being-installed-when-devserverhost-is-set-up-in-nuxtconfigts)
-        * [Auth middleware for protecting page does not work.](#auth-middleware-for-protecting-page-does-not-work)
-        * [Sentry not logging issue in development env](#sentry-not-logging-issue-in-development-env)
-    * [Changelog](#changelog)
-
+  * [Quirks](#quirks)
+    * [`pages` contains page files but the page cannot be accessed in url](#pages-contains-page-files-but-the-page-cannot-be-accessed-in-url)
+    * [`error  <script setup> cannot contain ES module exports  vue/no-export-in-script-setup` when committing files](#error--script-setup-cannot-contain-es-module-exports--vueno-export-in-script-setup-when-committing-files)
+    * [Service worker not being installed when `devServer.host` is set up in `nuxt.config.ts`](#service-worker-not-being-installed-when-devserverhost-is-set-up-in-nuxtconfigts)
+    * [Auth middleware for protecting page does not work.](#auth-middleware-for-protecting-page-does-not-work)
+    * [Sentry not logging issue in development env](#sentry-not-logging-issue-in-development-env)
+    * [Passing certain configuration to `mount` in test file throws typescript error](#passing-certain-configuration-to-mount-in-test-file-throws-typescript-error)
+    * [Coverage not being updated in sonarqube for tested file](#coverage-not-being-updated-in-sonarqube-for-tested-file)
+    * [Unit testing throws error despite all test passing](#unit-testing-throws-error-despite-all-test-passing)
+  * [Changelog](#changelog)
 <!-- TOC -->
 
 ## Quirks
@@ -201,10 +202,90 @@ As such, when working in this project by running `npm run dev`, Sentry will not 
 > in `.output/public`), for some reason does not trigger Sentry to log events, despite running in `preview` trigger
 > Sentry to log events just fine.
 
+### Passing certain configuration to `mount` in test file throws typescript error
+
+As mention here in an `@vue/test-utils` lib issue [here](https://github.com/vuejs/test-utils/issues/194), it is a known
+issue and so far only workaround exists.
+
+For example, the code below will trip typescript:
+
+```typescript
+it('it should render custom child', async () => {
+    await renderSuspended(TestedComponent, {
+        props: {
+            'data-teid': 'comp-fetch-spinner',
+        }, // ==> this line throws typescript error because prop is not defined (explicitly) in the component
+        slots: {
+            default: 'Main Content',
+        },
+    });
+});
+```
+
+The workarounds are either cast the offending line with `as any` like below:
+
+```typescript
+it('it should render custom child', async () => {
+    await renderSuspended(TestedComponent, {
+        props: {
+            'data-teid': 'comp-fetch-spinner',
+        } as any, // ==> typescript check passed!
+        slots: {
+            default: 'Main Content',
+        },
+    });
+
+    //
+});
+```
+
+and/or by adding shim:
+
+```typescript
+declare module '*.vue' {
+    import {DefineComponent} from 'vue';
+    const component: DefineComponent;
+    export default component;
+}
+```
+
+_(Excerpt taken from the linked issue for posterity)_
+
+### Coverage not being updated in sonarqube for tested file
+
+It has been noticed that sometimes, coverage report are not update despite running the test and successfully passed.
+Currently, the issue is anecdotal and only happens to few people and the workaround seemed to be to delete previous
+coverage/test result and re-run the test again so the system will surely generate a new report.
+
+### Unit testing throws error despite all test passing
+
+This project uses Sentry, which is initialized as a Nuxt's plugin. By default, Sentry only log files in `production`
+mode as reported in [Sentry not logging issue in development env](#sentry-not-logging-issue-in-development-env).
+However, it still does run instrumentation process and this process is what causes unit test to throw at the end of the
+run.
+
+To prevent the error form happening, we need to disable Sentry when running unit-test. It's important to note that while
+Sentry has `enabledd` flag in its settings, setting it to `false` does not stop all process of Sentry.
+As noted in [official docs](https://docs.sentry.io/platforms/javascript/configuration/options/#enabled), to prevent
+Sentry from running AT ALL, we need to NOT calling `Sentry.init()`.
+
+We need to add something like this when initializing Sentry:
+
+```ts
+if(!process.env.IS_TEST) {
+    Sentry.init({
+        // sentry options
+    })
+}
+```
+
+
 ## Changelog
 
 | Date       | Author | Notes                                                                                                                                            |
 |------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| 24-09-2024 | Gretta | Added "Coverage not being updated in sonarqube for tested file", "Unit testing throws error despite all test passing".                                                                               |
+| 19-09-2024 | Gretta | Added Passing certain configuration to `mount` in test file throws typescript error.                                                             |
 | 18-09-2024 | Gretta | Added Sentry not logging issue in development env.                                                                                               |
 | 17-09-2024 | Gretta | Added Service worker not being installed when `devServer.host` is set up in `nuxt.config.ts`, Auth middleware for protecting page does not work. |
 | 12-09-2024 | Gretta | Added `error  <script setup> cannot contain ES module exports  vue/no-export-in-script-setup` when committing files                              |
