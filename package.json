@@ -15,7 +15,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@iconify/json": "^2.2.246",
+    "@iconify/json": "^2.2.247",
     "@nuxt/eslint": "^0.5.6",
     "@nuxt/fonts": "^0.7.2",
     "@nuxt/icon": "^1.5.1",
