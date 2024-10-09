@@ -17,7 +17,7 @@
   "dependencies": {
     "@iconify/json": "^2.2.247",
     "@nuxt/eslint": "^0.5.6",
-    "@nuxt/fonts": "^0.7.2",
+    "@nuxt/fonts": "^0.8.0",
     "@nuxt/icon": "^1.5.1",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@pinia/nuxt": "^0.5.4",
