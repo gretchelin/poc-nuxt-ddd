@@ -212,4 +212,23 @@ export default defineNuxtConfig({
       global: true,
     },
   ],
+
+  // ========================================
+  // nuxt hooks
+  // ========================================
+
+  hooks: {
+    'pages:extend'(pages) {
+      const embedRoutes = pages.map((page) => {
+        return {
+          name: `embed-${page.name}`,
+          path: `/embed${page.path}`,
+          file: page.file,
+          children: page.children,
+        };
+      });
+
+      pages.push(...embedRoutes);
+    },
+  },
 });
