@@ -3,7 +3,8 @@ import { getAppConfig } from '#core/api/config';
 
 // Setup global site configuration
 export default defineNuxtPlugin(async () => {
-  const cookie = useCookie('appConfig');
+  const { COOKIE_KEY } = useSiteConfig();
+  const cookie = useCookie(COOKIE_KEY);
 
   // get config (if not already exist)
   try {
@@ -34,8 +35,8 @@ export default defineNuxtPlugin(async () => {
 
       // set color
       colorRange.forEach((code) => {
-        document.documentElement.style.setProperty(`--color-primary-${code}`, cookie.value?.primary_color);
-        document.documentElement.style.setProperty(`--color-secondary-${code}`, cookie.value?.secondary_color);
+        document.documentElement.style.setProperty(`--color-primary-${code}`, cookie.value?.colorPrimary);
+        document.documentElement.style.setProperty(`--color-secondary-${code}`, cookie.value?.colorSecondary);
       });
     }
   }
