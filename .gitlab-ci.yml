@@ -1,0 +1,5 @@
+include:
+  - project: mydigilearn-saas/explorer/mindful-explorer/Sideway
+    ref: master
+    file: service/cms-v2.yaml
+    
