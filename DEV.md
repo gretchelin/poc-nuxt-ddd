@@ -11,6 +11,7 @@
     * [Passing certain configuration to `mount` in test file throws typescript error](#passing-certain-configuration-to-mount-in-test-file-throws-typescript-error)
     * [Coverage not being updated in sonarqube for tested file](#coverage-not-being-updated-in-sonarqube-for-tested-file)
     * [Unit testing throws error despite all test passing](#unit-testing-throws-error-despite-all-test-passing)
+    * [Cannot import stuff using custom alias in server/* files](#cannot-import-stuff-using-custom-alias-in-server-files)
   * [Changelog](#changelog)
 <!-- TOC -->
 
@@ -272,11 +273,33 @@ Sentry from running AT ALL, we need to NOT calling `Sentry.init()`.
 We need to add something like this when initializing Sentry:
 
 ```ts
-if(!process.env.IS_TEST) {
+if (!process.env.IS_TEST) {
     Sentry.init({
         // sentry options
     })
 }
+```
+
+### Cannot import stuff using custom alias in server/* files
+
+Based on the issue [here](https://github.com/nuxt/nuxt/issues/13367), named layer alias is not yet supported. However,
+there is a workaround for this by using `resolve` paths when defining layer-level alias.
+
+```js
+// nuxt.config.ts
+
+export default defineNuxtConfig({
+    //... other config
+    alias: {
+        // DO THIS!
+        '#layername': resolve('layers/layername'),
+        '#flatlayername': resolve('flatlayername'),
+        
+        // instead of this
+        '#layername': 'layers/layername',
+        '#flatlayername': 'flatlayername',
+    }
+})
 ```
 
 
@@ -284,7 +307,8 @@ if(!process.env.IS_TEST) {
 
 | Date       | Author | Notes                                                                                                                                            |
 |------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| 24-09-2024 | Gretta | Added "Coverage not being updated in sonarqube for tested file", "Unit testing throws error despite all test passing".                                                                               |
+| 15-10-2024 | Gretta | Added "Cannot import stuff using custom alias in server/* files"                                                                                 |
+| 24-09-2024 | Gretta | Added "Coverage not being updated in sonarqube for tested file", "Unit testing throws error despite all test passing".                           |
 | 19-09-2024 | Gretta | Added Passing certain configuration to `mount` in test file throws typescript error.                                                             |
 | 18-09-2024 | Gretta | Added Sentry not logging issue in development env.                                                                                               |
 | 17-09-2024 | Gretta | Added Service worker not being installed when `devServer.host` is set up in `nuxt.config.ts`, Auth middleware for protecting page does not work. |

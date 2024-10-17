@@ -1,3 +1,5 @@
+import {resolve} from 'path';
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   extends: [
@@ -164,10 +166,10 @@ export default defineNuxtConfig({
   // aliases, layers, core and third party
   alias: {
     // layer-level aliases (prefixed with a `#`)
-    '#core': '/core',
-    '#playground': '~/layers/playground',
-    '#ui': '/ui',
-    '#auth': '~/layers/auth',
+    '#core': resolve('core'),
+    '#playground': resolve('layers/playground'),
+    '#ui': resolve('ui'),
+    '#auth': resolve('layers/auth'),
 
     // core
     '~/components': '/core/components',
