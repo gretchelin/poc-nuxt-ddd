@@ -2,6 +2,10 @@ import {resolve} from 'path';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  app: {
+    baseURL: process.env.NUXT_APP_BASE_URL,
+  },
+
   extends: [
     './core',
     './ui',
@@ -37,8 +41,8 @@ export default defineNuxtConfig({
   devServer: {
     host: process.env.NUXT_APP_DEVSERVER_HOST,
     https: {
-      key: './mydoma.in-key.pem',
-      cert: './mydoma.in.pem',
+      key: './mydigilearn.io-key.pem',
+      cert: './mydigilearn.io.pem',
     },
   },
 
@@ -110,7 +114,7 @@ export default defineNuxtConfig({
   // ========================================
 
   auth: {
-    isEnabled: true,
+    isEnabled: false,
     disableServerSideAuth: false,
     originEnvKey: 'NUXT_APP_BASE_URL',
     // when setting `baseURL`, make sure it ends with `/`!
