@@ -84,11 +84,11 @@
 <script setup lang="ts">
 import { usePlaygroundStore } from '#playground/stores/playground';
 
-const { signOut } = useAuth();
+const { signOut } = useAppAuth();
 const {
   data: authData,
   status: authStatus,
-} = useAuthState();
+} = useAppAuthState();
 const playgroundStore = usePlaygroundStore();
 
 const pageRef = computed(() => playgroundStore.pageRef);

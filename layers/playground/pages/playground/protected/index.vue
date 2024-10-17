@@ -12,7 +12,7 @@ import { usePlaygroundStore } from '#playground/stores/playground';
 
 definePageMeta({
   layout: 'playground',
-  middleware: ['playground', 'auth'],
+  middleware: ['playground', 'app-auth'],
 });
 
 const playgroundStore = usePlaygroundStore();
