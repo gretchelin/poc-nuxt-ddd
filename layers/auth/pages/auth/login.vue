@@ -63,7 +63,7 @@ import loginBg from '#auth/assets/graphic/login-bg.jpg';
 
 definePageMeta({
   layout: 'auth',
-  middleware: 'auth',
+  middleware: ['app-auth'],
   auth: { unauthenticatedOnly: true, navigateAuthenticatedTo: '/' },
 });
 
@@ -83,7 +83,8 @@ const ValidationSchema = object().shape({
 });
 
 // data
-const { signIn } = useAuth();
+const { signIn } = useAppAuth();
+const { orgCode } = useSiteConfig();
 
 // setup form
 const { defineField, handleSubmit, errors: formErrors, meta } = useForm({
@@ -96,7 +97,10 @@ const [passVal, passAttrs] = defineField(FieldKey.PASSWORD);
 const { mutate: postLoginMutate, isPending: isProcessing } = useMutation({
   mutationKey: ['auth-loading'],
   mutationFn: async (data: { email: string; password: string }) => {
-    return await signIn(data, {
+    return await signIn({
+      ...data,
+      org_code: orgCode.value,
+    }, {
       callbackUrl: '/',
     });
   },
@@ -104,7 +108,7 @@ const { mutate: postLoginMutate, isPending: isProcessing } = useMutation({
     alert('Logged in!');
   },
   onError: (err) => {
-    alert(`Failed to log in: ${err?.data?.statusMessage}`);
+    alert(`Failed to log in: ${err?.data?.message || err?.message}`);
   },
 });
 
