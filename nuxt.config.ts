@@ -39,7 +39,7 @@ export default defineNuxtConfig({
   // ========================================
 
   devServer: {
-    host: process.env.NUXT_APP_DEVSERVER_HOST,
+    host: 'mydigilearn.io',
     https: {
       key: './mydigilearn.io-key.pem',
       cert: './mydigilearn.io.pem',
