@@ -109,48 +109,7 @@ As such, for local development purposes, service workers will **ONLY** be automa
 accessed through `http://localhost`.
 
 If proxy is desired, then additional action must be done because we need to access the local proxy as https. To enable
-HTTPS access to local proxy, follow the steps below:
-
-1. Setup dev server setting in `nuxt.config.ts` ([Official docs](https://nuxt.com/docs/api/nuxt-config#devserver))
-
-```typescript
-export default defineNuxtConfig({
-    // ...other nuxt config
-    devServer: {
-        host: 'myprodydoma.in',
-        https: {
-            key: './myproxydoma.in-key.pem',
-            cert: './myproxydoma.in.pem',
-        },
-    },
-});
-```
-
-2. Install `mkcert` to generate certificate for HTTPS access ([Official docs](https://github.com/FiloSottile/mkcert))
-
-> ℹ️ If using WSL, install `mkcert` in windows, not WSL!
-
-3. Run the command below in command line (powershell if Windows) to locally register the certificate we are going to
-   make automatically
-
- ```bash
- mkcert -install
- ```
-
-4. Generate the certificate for our proxy. This will create the certificate in the dir the command was run.
-
- ```bash
- mkcert myproxydoma.in
- ```
-
-5. Copy the cert to root project. (If the file is copied to another dir, the path set in step 1 must be adjusted to
-   match the files location).
-6. Run the project and access it from `https://myproxydoma.in` and service workers will be installed.
-
-> **One thing to note though**, setting `https` value in `devServer` would make the project only accessible
-> through `https`
-> protocol, thus make `http` no longer accessible.
-> _Accessing `https://localhost:3000` requires another certificate to be generated and registered._
+HTTPS access to local proxy, follow the steps in `CONTRIB.md` under `Running HTTPS locally` section.
 
 ### Auth middleware for protecting page does not work.
 
