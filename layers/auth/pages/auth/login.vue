@@ -18,9 +18,6 @@
           :error="!!formErrors[FieldKey.USERNAME]"
         >
           <template #append>
-            <div class="text-xs text-neutral-400">
-              You can use <code class="text-neutral-300">appleblossom@mail.test</code>, <code class="text-neutral-300">runningyak@mail.test</code>, <code class="text-neutral-300">antsyfeet@mail.test</code> or <code class="text-neutral-300">jackinabox@mail.test</code> to login
-            </div>
             <ErrorMessage
               class="text-xs text-red-500"
               :name="FieldKey.USERNAME"
@@ -79,7 +76,7 @@ const FieldLabel = {
 
 const ValidationSchema = object().shape({
   [`${FieldKey.USERNAME}`]: string().trim().email().required().label(FieldLabel.USERNAME),
-  [`${FieldKey.PASSWORD}`]: string().trim().min(6).required().label(FieldLabel.PASSWORD),
+  [`${FieldKey.PASSWORD}`]: string().trim().required().label(FieldLabel.PASSWORD),
 });
 
 // data

@@ -15,9 +15,15 @@ export default defineEventHandler(async (event) => {
     // check for token in cookies
     const authCookie = getCookie(event, AUTH_COOKIE_NAME) || '';
 
-    decoded = jwt.decode(authCookie.value);
+    decoded = jwt.decode(authCookie);
   }
 
+  // break out if jwt cannot be decoded
+  if (!decoded) {
+    return false;
+  }
+
+  // jwt can be decoded
   if (!!decoded?.exp || decoded?.exp === 0) {
     // check for expiry time
     const jwtExp = decoded?.exp * 1000; // x1000 because exp is in seconds while Data.getTime() is in ms.
@@ -28,5 +34,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  return decoded;
+  console.log('[SERVER] verify.post', { decoded });
+
+  return true;
 });

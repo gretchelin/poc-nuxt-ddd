@@ -1,30 +1,25 @@
-import { AUTH_STATE_CHANGE_NAME } from '#auth/config/constants';
+import { AUTH_STATE_USER_NAME, AUTH_STATE_CHANGE_NAME } from '#auth/config/constants';
 
-export default defineNuxtPlugin(() => {
-  const { token } = storeToRefs(useAppAuthStore());
+export default defineNuxtPlugin((nuxtApp) => {
+  const EVENT_NAME = 'storage';
+  const storageListener = (evt) => {
+    // if auth state changes, reload page to make sure page have latest auth state
+    const { key, newValue, oldValue } = evt || {};
 
-  watch(token, (val) => {
-    if (val) {
-      window.localStorage.setItem(AUTH_STATE_CHANGE_NAME, parseFloat(window.localStorage.getItem(AUTH_STATE_NAME) || 0) + 1);
-    }
-    else {
-      window.localStorage.setItem(AUTH_STATE_CHANGE_NAME, 0);
-    }
-  });
-
-  const storageListener = (evt: StorageEvent) => {
-    if (evt.key == AUTH_STATE_CHANGE_NAME) {
-      if (evt.newValue !== evt.oldValue) {
-        window.location.reload();
+    if ([AUTH_STATE_USER_NAME, AUTH_STATE_CHANGE_NAME].includes(key)) {
+      if (newValue !== oldValue) {
+        window?.location?.reload();
       }
     }
   };
 
-  onMounted(() => {
-    window.addEventListener('storage', storageListener);
-  });
+  const cleanup = () => {
+    window.removeEventListener(EVENT_NAME, storageListener);
+  };
 
-  onBeforeUnmount(() => {
-    window.removeEventListener('storage', storageListener);
+  nuxtApp.hook('app:mounted', (vueApp) => {
+    window.addEventListener(EVENT_NAME, storageListener);
+
+    vueApp.onUnmount(cleanup);
   });
 });

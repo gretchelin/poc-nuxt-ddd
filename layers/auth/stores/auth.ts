@@ -1,10 +1,5 @@
 import { defineStore } from 'pinia';
-
-export enum AuthStatus {
-  AUTH = 'authenticated',
-  UNAUTH = 'unauthenticated',
-  PENDING = 'pending',
-};
+import type { AuthStatus } from '#auth/config/constants';
 
 export const useAppAuthStore = defineStore('playground', () => {
   // state

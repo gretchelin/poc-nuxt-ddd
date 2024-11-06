@@ -1,6 +1,5 @@
 export default function () {
-  const data = ref();
-  const status = ref();
+  const { session: data, status } = storeToRefs(useAppAuthStore());
 
   return {
     data, status,
