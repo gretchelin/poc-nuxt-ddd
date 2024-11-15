@@ -79,9 +79,9 @@
             text="Reset Filter"
             button-wrapper-class="!min-w-[140px]"
             button-class="!border-[1.5px] !p-[12px] !h-auto !rounded-lg"
-            @clickHandle="onFilterReset"
+            @click-handle="onFilterReset"
           >
-            <template slot="icon">
+            <template #icon>
               <span>
                 <VTrash
                   height="20"
@@ -106,7 +106,7 @@
         with-actions
         is-sort-head
         class="overflow-x-auto tb-data"
-        @sortChanged="onTableSort"
+        @sort-changed="onTableSort"
       >
         <template #cell(created_at)="{ column }">
           <p
@@ -142,13 +142,13 @@
 <script setup lang="ts">
 import { mapGetters } from 'vuex';
 import { debounce } from 'lodash-es';
-import { getDocumentList, deleteDocument } from '@/modules/document/api/api';
+import moment from 'moment';
+import { getDocumentList } from '@/modules/document/api/api';
 import { BASE_MODULE_URL, DocumentType } from '@/modules/document/config/constants';
 import DateRangeFilter from '@/fragments/setting/template/DateRangeFilter.vue';
 import TableBody from '@/components/datatable/TableBody.vue';
 import TableFooter from '@/components/datatable/TableFooter.vue';
 import VTrash from '@/components/icons/VTrash.vue';
-import moment from 'moment';
 
 export default {
   name: 'ListDocument',
@@ -269,78 +269,6 @@ export default {
     this.fetchData();
   },
   methods: {
-    onFilterDateSelected(val) {
-      this.filter.startDate = val?.startDate;
-      this.filter.endDate = val?.endDate;
-    },
-    onFilterReset() {
-      this.filter = {
-        search: '',
-        startDate: undefined,
-        endDate: undefined,
-      };
-
-      this.selectDate = {
-        sequence: 0,
-        startDate: undefined,
-        endDate: undefined,
-        show: false,
-        fetch: false,
-      };
-
-      this.filterDateKey += 1;
-
-      this.pagination.currentPage = 1;
-    },
-    onCreateClick() {
-      this.$router.push(`/${BASE_MODULE_URL}/${this.type}/create`);
-    },
-    onRowDetail(params) {
-      this.$router.push(`/${BASE_MODULE_URL}/${this.type}/detail/${params.id}`);
-    },
-    onRowEdit(params) {
-      this.$router.push(`/${BASE_MODULE_URL}/${this.type}/edit/${params.id}`);
-    },
-    onRowDelete(params) {
-      this.$swal({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-      }).then(({ isConfirmed }) => {
-        if (isConfirmed) {
-          deleteDocument(params.id).then(res => {
-              const { success, message } = res.data;
-
-              if (success) {
-                this.$swal('Success', message, 'success').then(() => {
-                  this.pagination = {
-                    currentPage: 1,
-                    totalPage: 1,
-                    perPage: 10,
-                    totalData: 0,
-                    search: null,
-                    sortBy: null,
-                    order_by: '',
-                  };
-                });
-              }
-
-              this.debouncedFetch();
-            })
-            .catch(err => {
-              this.$swal('Failed', err.response.data.message, 'error');
-            });
-        }
-      });
-    },
-    onTableSort(val) {
-      this.pagination.order_by = val.order_by || undefined;
-      this.pagination.order_dir = val.order_type;
-    },
     fetchData() {
       const params = {
         page: this.pagination.currentPage,
@@ -354,7 +282,7 @@ export default {
       };
 
       getDocumentList({ params })
-        .then(response => {
+        .then((response) => {
           if (response.data.success) {
             const { data, pagination } = response.data?.data || {};
 
