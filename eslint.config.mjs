@@ -12,10 +12,10 @@ export default withNuxt({
         max: 1,
       },
     }],
-    "vue/multi-word-component-names": "off", // turning this off because nuxt pages may have single-word "component"
+    'vue/multi-word-component-names': 'off', // turning this off because nuxt pages may have single-word "component"
     'vue/first-attribute-linebreak': ['error', {
       singleline: 'ignore', multiline: 'below',
     }],
-    "@typescript-eslint/no-explicit-any": "off",
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 });

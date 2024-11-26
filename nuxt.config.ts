@@ -1,4 +1,4 @@
-import {resolve} from 'path';
+import { resolve } from 'path';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -180,6 +180,7 @@ export default defineNuxtConfig({
     '#playground': resolve('layers/playground'),
     '#ui': resolve('ui'),
     '#auth': resolve('layers/auth'),
+    '#document': resolve('layers/document'),
 
     // core
     '~/components': '/core/components',

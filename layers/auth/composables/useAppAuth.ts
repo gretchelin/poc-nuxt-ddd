@@ -1,6 +1,6 @@
 import { useLocalStorage } from '@vueuse/core';
 import { postLogin } from '../api/auth';
-import { AUTH_COOKIE_NAME, AUTH_STATE_USER_NAME } from '#auth/config/constants';
+import { AUTH_COOKIE_NAME, AUTH_STATE_USER_NAME, AUTH_COOKIE_EXPIRED_AT, AUTH_COOKIE_USER_INFO } from '#auth/config/constants';
 
 export default function () {
   const authStore = useAppAuthStore();
@@ -9,6 +9,8 @@ export default function () {
     secure: true,
     maxAge: 24 * 60 * 60,
   });
+  const userInfo = useCookie(AUTH_COOKIE_USER_INFO);
+  const expiredDate = useCookie(AUTH_COOKIE_EXPIRED_AT);
 
   const getUser = (data: Record<string, any>) => {
     // const { data: loginRes, error } = await useFetch('/api/session');
@@ -18,6 +20,8 @@ export default function () {
   const clearToken = () => {
     // STEP 1: Clear session
     authCookie.value = '';
+    userInfo.value = '';
+    expiredDate.value = '';
     authStore.setToken(undefined);
     authStore.setStatus(AuthStatus.UNAUTH);
   };
@@ -101,5 +105,22 @@ export default function () {
     return data;
   };
 
-  return { signIn, signOut, verifyToken, setToken };
+  const isAuthenticated = () => {
+    try {
+      if (!userInfo?.value) {
+        return false;
+      }
+      
+      
+      if (!userInfo?.value || expiredDate?.value < new Date().getTime()) {
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+
+    return true;
+  }
+
+  return { signIn, signOut, verifyToken, setToken, isAuthenticated };
 }
