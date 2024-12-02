@@ -3,10 +3,31 @@
     <h1 class="mb-4  border-b pb-2 font-bold text-2xl">
       This is Playground
     </h1>
+    <UIButton color="primary">
+      Ini UIButton
+    </UIButton>
+    <UIButton color="secondary">
+      Ini UIButton
+    </UIButton>
+    <UIButton color="info">
+      Ini UIButton
+    </UIButton>
+    <UIButton color="warning">
+      Ini UIButton
+    </UIButton>
+    <UIButton color="success">
+      Ini UIButton
+    </UIButton>
+    <UIButton
+      color="error"
+      variant="outlined"
+    >
+      Ini UIButton
+    </UIButton>
 
     <button
       type="button"
-      class="inline-block border p-2 rounded hover:border-neutral-700"
+      class="bg-secondary-300 inline-block border p-2 rounded hover:border-neutral-700"
       @click="cancelFetch"
     >
       Cancel fetch
@@ -82,11 +103,12 @@
 <script setup lang="ts">
 import { useQueryClient, useQuery } from '@tanstack/vue-query';
 import EntryCard from '#playground/components/EntryCard.vue';
+import UIButton from '#ui/components/atoms/button';
 import { usePlaygroundStore } from '#playground/stores/playground';
 
 // Page Setup
 definePageMeta({
-  layout: 'playground',
+  layout: 'full',
   middleware: ['playground'],
 });
 

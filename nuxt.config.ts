@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     'floating-vue/nuxt',
     '@sentry/nuxt/module',
     '@nuxt/test-utils/module',
+    '@nuxtjs/storybook',
   ],
   eslint: {
     config: {
@@ -32,6 +33,11 @@ export default defineNuxtConfig({
         semi: true,
       },
     },
+  },
+  // setup storybook
+  storybook: {
+    url: 'http://localhost:6006',
+    port: 6006,
   },
 
   // ========================================
@@ -41,8 +47,8 @@ export default defineNuxtConfig({
   devServer: {
     host: 'mydigilearn.io',
     https: {
-      key: './mydigilearn.io-key.pem',
-      cert: './mydigilearn.io.pem',
+      // key: './mydigilearn.io-key.pem',
+      // cert: './mydigilearn.io.pem',
     },
   },
 

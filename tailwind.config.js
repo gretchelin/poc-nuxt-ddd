@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         primary: {
+          25: 'var(--color-primary-25)',
           50: 'var(--color-primary-50)',
           100: 'var(--color-primary-100)',
           200: 'var(--color-primary-200)',
@@ -18,6 +19,7 @@ export default {
           950: 'var(--color-primary-950)',
         },
         secondary: {
+          25: 'var(--color-secondary-25)',
           50: 'var(--color-secondary-50)',
           100: 'var(--color-secondary-100)',
           200: 'var(--color-secondary-200)',
