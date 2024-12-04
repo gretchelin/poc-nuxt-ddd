@@ -19,7 +19,12 @@
         >
           <template #append>
             <div class="text-xs text-neutral-400">
-              You can use <code class="text-neutral-300">appleblossom@mail.test</code>, <code class="text-neutral-300">runningyak@mail.test</code>, <code class="text-neutral-300">antsyfeet@mail.test</code> or <code class="text-neutral-300">jackinabox@mail.test</code> to login
+              You can use
+              <code class="text-neutral-300">appleblossom@mail.test</code>,
+              <code class="text-neutral-300">runningyak@mail.test</code>,
+              <code class="text-neutral-300">antsyfeet@mail.test</code> or
+              <code class="text-neutral-300">jackinabox@mail.test</code> to
+              login
             </div>
             <ErrorMessage
               class="text-xs text-red-500"
@@ -78,8 +83,16 @@ const FieldLabel = {
 };
 
 const ValidationSchema = object().shape({
-  [`${FieldKey.USERNAME}`]: string().trim().email().required().label(FieldLabel.USERNAME),
-  [`${FieldKey.PASSWORD}`]: string().trim().min(6).required().label(FieldLabel.PASSWORD),
+  [`${FieldKey.USERNAME}`]: string()
+    .trim()
+    .email()
+    .required()
+    .label(FieldLabel.USERNAME),
+  [`${FieldKey.PASSWORD}`]: string()
+    .trim()
+    .min(6)
+    .required()
+    .label(FieldLabel.PASSWORD),
 });
 
 // data
@@ -87,7 +100,12 @@ const { signIn } = useAppAuth();
 const { orgCode } = useSiteConfig();
 
 // setup form
-const { defineField, handleSubmit, errors: formErrors, meta } = useForm({
+const {
+  defineField,
+  handleSubmit,
+  errors: formErrors,
+  meta,
+} = useForm({
   validationSchema: toTypedSchema(ValidationSchema),
 });
 const [usernameVal, usernameAttrs] = defineField(FieldKey.USERNAME);
@@ -97,12 +115,15 @@ const [passVal, passAttrs] = defineField(FieldKey.PASSWORD);
 const { mutate: postLoginMutate, isPending: isProcessing } = useMutation({
   mutationKey: ['auth-loading'],
   mutationFn: async (data: { email: string; password: string }) => {
-    return await signIn({
-      ...data,
-      org_code: orgCode.value,
-    }, {
-      callbackUrl: '/',
-    });
+    return await signIn(
+      {
+        ...data,
+        org_code: orgCode.value,
+      },
+      {
+        callbackUrl: '/',
+      },
+    );
   },
   onSuccess: () => {
     alert('Logged in!');

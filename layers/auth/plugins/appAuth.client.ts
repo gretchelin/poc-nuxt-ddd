@@ -5,9 +5,12 @@ export default defineNuxtPlugin(() => {
 
   watch(token, (val) => {
     if (val) {
-      window.localStorage.setItem(AUTH_STATE_CHANGE_NAME, parseFloat(window.localStorage.getItem(AUTH_STATE_NAME) || 0) + 1);
-    }
-    else {
+      window.localStorage.setItem(
+        AUTH_STATE_CHANGE_NAME,
+        parseFloat(window.localStorage.getItem(AUTH_STATE_CHANGE_NAME) || 0) +
+          1,
+      );
+    } else {
       window.localStorage.setItem(AUTH_STATE_CHANGE_NAME, 0);
     }
   });

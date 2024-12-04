@@ -1,7 +1,13 @@
+import { useCookie } from 'nuxt/app';
 import { useLocalStorage } from '@vueuse/core';
 import { postLogin } from '../api/auth';
-import { AUTH_COOKIE_NAME, AUTH_STATE_USER_NAME, AUTH_COOKIE_EXPIRED_AT, AUTH_COOKIE_USER_INFO } from '#auth/config/constants';
-
+import {
+  AUTH_COOKIE_NAME,
+  AUTH_STATE_USER_NAME,
+  AUTH_COOKIE_EXPIRED_AT,
+  AUTH_COOKIE_USER_INFO,
+} from '#auth/config/constants';
+import { useAppAuthStore } from '#auth/stores/auth.ts';
 export default function () {
   const authStore = useAppAuthStore();
   const authCookie = useCookie(AUTH_COOKIE_NAME, {
@@ -29,46 +35,43 @@ export default function () {
   const setToken = (token?: string) => {
     // if token is empty, clear state
     // otherwise, set auth state
-    if ((token ?? true) || token === '') {
+    if (!token || token === '') {
       clearToken();
       return;
     }
-
     // STEP 1: Set session
-    authCookie.value = data?.token;
-    authStore.setToken(data?.token);
+    authCookie.value = token;
+    authStore.setToken(token);
     authStore.setStatus(AuthStatus.AUTH);
   };
 
   const signIn = async (loginData, options?: { callbackUrl: string }) => {
     authStore.setStatus(AuthStatus.PENDING);
-
+    let loginRes = {};
     try {
-      const loginRes = await postLogin(loginData);
+      loginRes = await postLogin(loginData);
 
       // await useFetch('/api/login', {
       //   method: 'post',
       //   body: loginData,
       // });
 
-      console.log('[USEAPPAUTH]', { loginRes });
-    }
-    catch (error) {
+      console.log('[USEAPPAUTH]', loginRes);
+    } catch (error) {
       console.log('[USEAPPAUTH]', { error });
       authStore.setStatus(AuthStatus.UNAUTH);
       throw error;
     }
 
     // STEP 1: Set session
-    const data = loginRes;
+    const { data } = loginRes;
     setToken(data?.token);
-
     // STEP 2: Get session data
     await getUser(data);
 
     // STEP 3 : redirect user if `options.callbackUrl` i set
     if (options?.callbackUrl) {
-      navigateTo(otions?.callbackUrl);
+      navigateTo(options?.callbackUrl);
     }
   };
 
@@ -110,8 +113,6 @@ export default function () {
       if (!userInfo?.value) {
         return false;
       }
-      
-      
       if (!userInfo?.value || expiredDate?.value < new Date().getTime()) {
         return false;
       }
@@ -120,7 +121,7 @@ export default function () {
     }
 
     return true;
-  }
+  };
 
   return { signIn, signOut, verifyToken, setToken, isAuthenticated };
 }
