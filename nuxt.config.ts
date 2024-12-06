@@ -5,11 +5,12 @@ export default defineNuxtConfig({
   app: {
     baseURL: process.env.NUXT_APP_BASE_URL,
   },
-
-  extends: [
-    './core',
-    './ui',
-  ],
+  typescript: {
+    tsConfig: {
+      include: ['**/types/**/*.d.ts'],
+    },
+  },
+  extends: ['./core', './ui'],
   ssr: true,
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
@@ -79,9 +80,7 @@ export default defineNuxtConfig({
   fonts: {
     // define font options
     // https://fonts.nuxt.com/get-started/configuration#families
-    families: [
-      { name: 'Inter', provider: 'google' },
-    ],
+    families: [{ name: 'Inter', provider: 'google' }],
   },
 
   // ========================================
@@ -202,9 +201,7 @@ export default defineNuxtConfig({
   },
 
   // setup global style to be included in each page
-  css: [
-    '~/core/assets/global.css',
-  ],
+  css: ['~/core/assets/global.css'],
 
   // define layers components path config here
   // relative path must use `~` as base
