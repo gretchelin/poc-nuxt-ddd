@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     'floating-vue/nuxt',
     '@sentry/nuxt/module',
     '@nuxt/test-utils/module',
-    '@nuxtjs/storybook',
   ],
   eslint: {
     config: {

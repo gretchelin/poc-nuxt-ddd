@@ -62,7 +62,16 @@
           <slot />
         </main>
 
+<<<<<<< HEAD
         <footer data-qa="footer" class="footer">FOOTER</footer>
+=======
+        <!-- <footer
+          data-qa="footer"
+          class="footer"
+        >
+          FOOTER
+        </footer> -->
+>>>>>>> 90b1c04 (feat(global-component): button, datatable, breadcrumb)
       </div>
     </div>
   </div>

@@ -1,0 +1,57 @@
+/* base classes */
+.button {
+  @apply flex items-center gap-1 font-medium rounded transition-colors duration-300 focus:outline-none;
+}
+
+/* colors */
+.button--primary {
+  @apply bg-teal-500 hover:bg-teal-600 focus:bg-teal-700 text-white disabled:bg-red-300;
+}
+
+.button--secondary {
+  @apply bg-gray-50 hover:bg-gray-50 text-black disabled:bg-gray-300;
+}
+
+.button--success {
+  @apply bg-green-500 hover:bg-green-600 focus:bg-green-700 text-white;
+}
+
+.button--info {
+  @apply bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 text-white;
+}
+
+.button--warning {
+  @apply bg-orange-500 hover:bg-orange-600 focus:bg-orange-700 text-white;
+}
+
+.button--error {
+  @apply bg-red-500 hover:bg-red-600 focus:bg-red-700 text-white;
+}
+
+/* size classes */
+.button--small {
+  @apply px-3 py-1 text-sm rounded;
+}
+
+.button--medium {
+  @apply px-4 py-2 text-base rounded-md;
+}
+
+.button--large {
+  @apply px-6 py-3 text-lg rounded-lg;
+}
+
+/* variants */
+.button--solid {
+  @apply shadow;
+}
+
+.button--outlined {
+  @apply border;
+}
+
+/* Disabled state */
+.button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

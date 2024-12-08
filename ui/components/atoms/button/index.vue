@@ -1,21 +1,25 @@
 <template>
   <button
-    :class="buttonClasses"
+    :class="[
+      'button',
+      `button--${color}`,
+      `button--${variant}`,
+      `button--${size}`
+    ]"
     :disabled="disabled || loading"
     @click="handleClick"
   >
-    <template v-if="loading">
-      <span class="loader" /> <!-- Optional loading spinner -->
-    </template>
-    <template v-else>
-      <span
-        v-if="icon"
-        class="mr-2"
-      >
-        <slot name="icon" /> <!-- Optional icon -->
-      </span>
-      <slot />
-    </template>
+    <!-- Loading slot content (if loading is true) -->
+    <slot name="loading" v-if="loading"></slot>
+    
+    <!-- Prepend content, usually for icons or other elements -->
+    <slot name="prepend" :iconClass="iconClass" />
+    
+    <!-- Default slot for the label/text -->
+    <slot />
+    
+    <!-- Append content, usually for icons or other elements -->
+    <slot name="append" :iconClass="iconClass" />
   </button>
 </template>
 
@@ -26,7 +30,7 @@ type ButtonSizes = 'large' | 'medium' | 'small';
 type ButtonColors = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error';
 type ButtonVariants = 'solid' | 'outlined' | 'soft' | 'transparent';
 
-export interface ButtonProps {
+interface ButtonProps {
   size?: ButtonSizes;
   color?: ButtonColors;
   variant?: ButtonVariants;
@@ -48,30 +52,9 @@ const props = withDefaults(defineProps<ButtonProps>(), {
 
 const isDisabled = computed(() => props.disabled || props.loading);
 
-// Dynamic classes based on props
-const buttonClasses = computed(() => {
-  const baseStyles = 'font-medium rounded transition-colors duration-300 focus:outline-none';
-  const colorStyles = {
-    primary: 'bg-brand-solid text-white disabled:bg-red-300',
-    secondary: 'bg-secondary text-black disabled:bg-gray-300',
-    success: 'bg-success-solid text-white',
-    info: 'bg-info-solid text-white',
-    warning: 'bg-warning-solid text-white',
-    error: 'bg-error-solid text-white',
-  };
-  const sizeStyles = {
-    small: 'px-3 py-1 text-sm rounded',
-    medium: 'px-4 py-2 text-base rounded-md',
-    large: 'px-6 py-3 text-lg rounded-lg',
-  };
-  const variantStyles = {
-    solid: 'shadow-100',
-    outlined: 'border',
-  };
-
-  return `${baseStyles} ${colorStyles[props.color]} ${sizeStyles[props.size]} ${variantStyles[props.variant]} ${
-    props.disabled || props.loading ? 'opacity-50 cursor-not-allowed' : ''
-  }`;
+// Icon class for prepend and append slots
+const iconClass = computed(() => {
+  return props.icon;
 });
 
 // Handling button click
@@ -84,6 +67,8 @@ const handleClick = () => {
 </script>
 
 <style scoped>
+@import './style.css';
+
 .loader {
   border: 2px solid #f3f3f3;
   border-top: 2px solid #3498db;

@@ -1,6 +1,7 @@
 import { useCookie } from 'nuxt/app';
 import { useLocalStorage } from '@vueuse/core';
 import { postLogin } from '../api/auth';
+<<<<<<< HEAD
 import {
   AUTH_COOKIE_NAME,
   AUTH_STATE_USER_NAME,
@@ -8,6 +9,10 @@ import {
   AUTH_COOKIE_USER_INFO,
 } from '#auth/config/constants';
 import { useAppAuthStore } from '#auth/stores/auth.ts';
+=======
+import { AUTH_COOKIE_NAME, AUTH_STATE_USER_NAME, AUTH_COOKIE_EXPIRED_AT, AUTH_COOKIE_USER_INFO } from '#auth/config/constants';
+
+>>>>>>> 90b1c04 (feat(global-component): button, datatable, breadcrumb)
 export default function () {
   const authStore = useAppAuthStore();
   const authCookie = useCookie(AUTH_COOKIE_NAME, {
@@ -113,6 +118,11 @@ export default function () {
       if (!userInfo?.value) {
         return false;
       }
+<<<<<<< HEAD
+=======
+      
+      
+>>>>>>> 90b1c04 (feat(global-component): button, datatable, breadcrumb)
       if (!userInfo?.value || expiredDate?.value < new Date().getTime()) {
         return false;
       }
@@ -121,7 +131,11 @@ export default function () {
     }
 
     return true;
+<<<<<<< HEAD
   };
+=======
+  }
+>>>>>>> 90b1c04 (feat(global-component): button, datatable, breadcrumb)
 
   return { signIn, signOut, verifyToken, setToken, isAuthenticated };
 }
