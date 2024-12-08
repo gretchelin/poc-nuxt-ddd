@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from '@nuxtjs/storybook';
+import type { Meta, StoryFn } from '@nuxtjs/storybook';
 import Breadcrumb from './index.vue';
 
 export default {
@@ -13,7 +13,7 @@ export default {
   },
 } as Meta<typeof Breadcrumb>;
 
-const Template: StoryFn<typeof Breadcrumb> = (args) => ({
+const Template: StoryFn<typeof Breadcrumb> = args => ({
   components: { Breadcrumb },
   setup() {
     return { args };
@@ -30,5 +30,3 @@ Default.args = {
     { href: '/products/electronics', text: 'Electronics', active: true },
   ],
 };
-
-

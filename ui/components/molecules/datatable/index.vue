@@ -4,7 +4,9 @@
     <table class="min-w-full table-auto">
       <thead class="bg-gray-100">
         <tr>
-        <th class="px-4 py-2 text-left">#</th> <!-- Row Number Column -->
+          <th class="px-4 py-2 text-left">
+            #
+          </th> <!-- Row Number Column -->
 
           <th
             v-for="(column, index) in columns"
@@ -13,7 +15,10 @@
             @click="sortData(column.key)"
           >
             {{ column.label }}
-            <span v-if="column.sortable" class="ml-1 text-sm text-gray-500">
+            <span
+              v-if="column.sortable"
+              class="ml-1 text-sm text-gray-500"
+            >
               <Icon
                 name="uil-filter"
                 width="40"
@@ -26,9 +31,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, rowIndex) in sortedData" :key="rowIndex">
-            <td class="px-4 py-2">{{ getRowNumber(rowIndex) }}</td> 
-          <td v-for="(column, columnIndex) in columns" :key="columnIndex" class="px-4 py-2">
+        <tr
+          v-for="(row, rowIndex) in sortedData"
+          :key="rowIndex"
+        >
+          <td class="px-4 py-2">
+            {{ getRowNumber(rowIndex) }}
+          </td>
+          <td
+            v-for="(column, columnIndex) in columns"
+            :key="columnIndex"
+            class="px-4 py-2"
+          >
             {{ row[column.key] }}
           </td>
         </tr>
@@ -38,9 +52,9 @@
     <!-- Pagination -->
     <div class="flex justify-between items-center mt-4">
       <button
-        @click="prevPage"
         :disabled="currentPage === 1"
         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+        @click="prevPage"
       >
         Previous
       </button>
@@ -48,19 +62,19 @@
         <button
           v-for="page in pageNumbers"
           :key="page"
-          @click="goToPage(page)"
           :class="[
             currentPage === page ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-700',
-            'px-4 py-2 rounded-md'
+            'px-4 py-2 rounded-md',
           ]"
+          @click="goToPage(page)"
         >
           {{ page }}
         </button>
       </div>
       <button
-        @click="nextPage"
         :disabled="currentPage === totalPages"
         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+        @click="nextPage"
       >
         Next
       </button>
@@ -100,7 +114,7 @@ const sortKey = ref<string | null>(null);
 const sortOrder = ref<'asc' | 'desc'>('asc');
 
 const sortedData = computed(() => {
-  let sorted = [...props.data];
+  const sorted = [...props.data];
 
   if (sortKey.value) {
     sorted.sort((a, b) => {
@@ -144,7 +158,8 @@ const goToPage = (page: number) => {
 const sortData = (key: string) => {
   if (sortKey.value === key) {
     sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
-  } else {
+  }
+  else {
     sortKey.value = key;
     sortOrder.value = 'asc';
   }
@@ -154,7 +169,6 @@ const sortData = (key: string) => {
 const getRowNumber = (index: number) => {
   return (currentPage.value - 1) * itemsPerPage.value + index + 1;
 };
-
 </script>
 
 <style scoped>

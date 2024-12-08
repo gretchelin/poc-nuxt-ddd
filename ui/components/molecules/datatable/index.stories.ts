@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/vue3';
+import type { Meta, Story } from '@storybook/vue3';
 import DataTable from './index.vue';
 
 export default {
@@ -6,7 +6,7 @@ export default {
   component: DataTable,
 } as Meta<typeof DataTable>;
 
-const Template: Story<typeof DataTable> = (args) => ({
+const Template: Story<typeof DataTable> = args => ({
   components: { DataTable },
   setup() {
     return { args };

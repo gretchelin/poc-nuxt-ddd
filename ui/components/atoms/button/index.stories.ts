@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/vue3';
+import type { Meta, Story } from '@storybook/vue3';
 import Button from './index.vue';
 
 export default {
@@ -45,7 +45,7 @@ export default {
   },
 } as Meta<typeof Button>;
 
-const Template: Story<typeof Button> = (args) => ({
+const Template: Story<typeof Button> = args => ({
   components: { Button },
   setup() {
     return { args };

@@ -119,23 +119,32 @@ export default function () {
         return false;
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       
       
 >>>>>>> 90b1c04 (feat(global-component): button, datatable, breadcrumb)
+=======
+
+>>>>>>> 4fb3194 (feat(global-component): button, datatable, breadcrumb)
       if (!userInfo?.value || expiredDate?.value < new Date().getTime()) {
         return false;
       }
-    } catch (error) {
+    }
+    catch (error) {
       return false;
     }
 
     return true;
 <<<<<<< HEAD
+<<<<<<< HEAD
   };
 =======
   }
 >>>>>>> 90b1c04 (feat(global-component): button, datatable, breadcrumb)
+=======
+  };
+>>>>>>> 4fb3194 (feat(global-component): button, datatable, breadcrumb)
 
   return { signIn, signOut, verifyToken, setToken, isAuthenticated };
 }

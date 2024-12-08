@@ -3,9 +3,12 @@
     <h1 class="mb-4  border-b pb-2 font-bold text-2xl">
       This is Playground
     </h1>
-    <UIButton color="primary" :icon="true">
+    <UIButton
+      color="primary"
+      :icon="true"
+    >
       <template #prepend>
-         <Icon
+        <Icon
           name="uil-pen"
           width="25"
           height="20"
@@ -13,12 +16,15 @@
           class="text-white"
         />
       </template>
-      UI Button 
+      UI Button
     </UIButton>
     <UIButton color="secondary">
       Ini UIButton
     </UIButton>
-    <UIButton color="info" :loading="true">
+    <UIButton
+      color="info"
+      :loading="true"
+    >
       <template #loading>
         <Icon
           name="uil-spinner"
@@ -51,7 +57,7 @@
       Cancel fetch
     </button>
 
-    <UIDatatable v-bind="datatable"/>
+    <UIDatatable v-bind="datatable" />
 
     <div>
       Page:
@@ -181,7 +187,7 @@ const datatable = {
     { name: 'Anna Lee', age: 22, country: 'Australia' },
     { name: 'Anna Lee', age: 22, country: 'Australia' },
   ],
-}
+};
 
 // Computed
 const itemRange = computed(() => {

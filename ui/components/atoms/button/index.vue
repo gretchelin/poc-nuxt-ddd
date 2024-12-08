@@ -4,22 +4,31 @@
       'button',
       `button--${color}`,
       `button--${variant}`,
-      `button--${size}`
+      `button--${size}`,
     ]"
     :disabled="disabled || loading"
     @click="handleClick"
   >
     <!-- Loading slot content (if loading is true) -->
-    <slot name="loading" v-if="loading"></slot>
-    
+    <slot
+      v-if="loading"
+      name="loading"
+    />
+
     <!-- Prepend content, usually for icons or other elements -->
-    <slot name="prepend" :iconClass="iconClass" />
-    
+    <slot
+      name="prepend"
+      :icon-class="iconClass"
+    />
+
     <!-- Default slot for the label/text -->
     <slot />
-    
+
     <!-- Append content, usually for icons or other elements -->
-    <slot name="append" :iconClass="iconClass" />
+    <slot
+      name="append"
+      :icon-class="iconClass"
+    />
   </button>
 </template>
 
