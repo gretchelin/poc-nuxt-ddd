@@ -32,7 +32,7 @@
           <!-- Separator Slot -->
           <slot
             name="separator"
-            v-bind="{ active: item?.active, class: 'breadcrumb--separator', value: 'separator' }"
+            v-bind="{ active: item?.active, class: 'breadcrumb--separator', value: separator }"
           >
             <!-- Default separator content if no slot is provided -->
             <span 
