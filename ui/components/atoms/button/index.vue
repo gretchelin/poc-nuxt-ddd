@@ -46,7 +46,7 @@ interface ButtonProps {
   disabled?: boolean;
   fullWidth?: boolean;
   loading?: boolean;
-  icon?: boolean;
+  iconClass?: boolean;
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
@@ -56,14 +56,14 @@ const props = withDefaults(defineProps<ButtonProps>(), {
   disabled: false,
   fullWidth: false,
   loading: false,
-  icon: undefined,
+  iconClass: undefined,
 });
 
 const isDisabled = computed(() => props.disabled || props.loading);
 
 // Icon class for prepend and append slots
 const iconClass = computed(() => {
-  return props.icon;
+  return props.iconClass;
 });
 
 // Handling button click
