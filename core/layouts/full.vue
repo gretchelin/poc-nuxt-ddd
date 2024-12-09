@@ -62,7 +62,12 @@
           <slot />
         </main>
 
-        <footer data-qa="footer" class="footer">FOOTER</footer>
+        <!-- <footer
+          data-qa="footer"
+          class="footer"
+        >
+          FOOTER
+        </footer> -->
       </div>
     </div>
   </div>

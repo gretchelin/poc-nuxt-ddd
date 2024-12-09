@@ -3,14 +3,38 @@
     <h1 class="mb-4  border-b pb-2 font-bold text-2xl">
       This is Playground
     </h1>
-    <UIButton color="primary">
-      Ini UIButton
+    <UIButton
+      color="primary"
+      :icon="true"
+    >
+      <template #prepend>
+        <Icon
+          name="uil-pen"
+          width="25"
+          height="20"
+          mode="svg"
+          class="text-white"
+        />
+      </template>
+      UI Button
     </UIButton>
     <UIButton color="secondary">
       Ini UIButton
     </UIButton>
-    <UIButton color="info">
-      Ini UIButton
+    <UIButton
+      color="info"
+      :loading="true"
+    >
+      <template #loading>
+        <Icon
+          name="uil-spinner"
+          width="20"
+          height="20"
+          mode="svg"
+          class="animate-spin"
+        />
+      </template>
+      Loading
     </UIButton>
     <UIButton color="warning">
       Ini UIButton
