@@ -57,6 +57,11 @@
       Cancel fetch
     </button>
 
+    <UIBreadcrumb
+      title="Document"
+      :items="breadcrumbs"
+    />
+
     <div>
       Page:
       <ul class="list-none flex gap-2 flex-wrap">
@@ -128,6 +133,7 @@
 import { useQueryClient, useQuery } from '@tanstack/vue-query';
 import EntryCard from '#playground/components/EntryCard.vue';
 import UIButton from '#ui/components/atoms/button';
+import UIBreadcrumb from '#ui/components/atoms/breadcrumb';
 import { usePlaygroundStore } from '#playground/stores/playground';
 
 // Page Setup
@@ -143,6 +149,10 @@ const itemPerPage = ref(20);
 const pageTotal = ref(1);
 const total = ref(0);
 const playgroundStore = usePlaygroundStore();
+const breadcrumbs = [
+  { text: 'Learning Content', href: '' },
+  { text: 'Document', href: '/document', active: true },
+];
 
 // Computed
 const itemRange = computed(() => {
