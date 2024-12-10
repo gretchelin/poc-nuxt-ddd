@@ -3,14 +3,21 @@
     <div
       aria-label="breadcrumb"
       data-qa="breadcrumb"
-      class="mb-4 flex space-x-4 items-center"
+      class="flex space-x-4 items-center"
     >
       <!-- Title Slot with Default Content -->
-      <slot name="title" v-bind="{ titleClass: 'breadcrumb--title' }">
-        <div class="breadcrumb--title">{{ title }}</div>
+      <slot
+        name="title"
+        v-bind="{ titleClass: 'breadcrumb--title' }"
+      >
+        <div class="breadcrumb--title">
+          {{ title }}
+        </div>
       </slot>
 
-      <div class="text-gray-400 text-sm">|</div>
+      <div class="text-gray-400 text-sm">
+        |
+      </div>
 
       <div class="flex gap-4 items-center">
         <div
@@ -22,7 +29,7 @@
             <div
               :class="[
                 item.active ? 'text-teal-500 font-semibold' : 'text-gray-400',
-                'text-sm'
+                'text-sm',
               ]"
             >
               {{ item.text }}
@@ -35,7 +42,7 @@
             v-bind="{ active: item?.active, class: 'breadcrumb--separator', value: separator }"
           >
             <!-- Default separator content if no slot is provided -->
-            <span 
+            <span
               v-if="!item.active"
               class="breadcrumb--separator"
             >
@@ -58,7 +65,7 @@ interface BreadcrumbItem {
 }
 
 interface IProps {
-  title?: string; 
+  title?: string;
   items: BreadcrumbItem[];
   separator?: string;
 }
@@ -67,12 +74,10 @@ const props = withDefaults(defineProps<IProps>(), {
   title: '',
   items: [] as BreadcrumbItem[],
   separator: '>',
-})
-
+});
 </script>
 
 <style scoped>
-
 .breadcrumb--title {
   @apply font-bold text-lg
 }
@@ -80,5 +85,4 @@ const props = withDefaults(defineProps<IProps>(), {
 .breadcrumb--separator {
   @apply text-gray-400 text-sm
 }
-
 </style>

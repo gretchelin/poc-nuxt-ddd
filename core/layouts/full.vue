@@ -7,10 +7,17 @@
       >
         <div class="border-b-2 border-gray-100">
           <div class="flex items-center space-x-3 mb-6 mx-2 mt-4">
-            <img src="public/img/logo/logo.svg" alt="myDigiLearn" />
+            <img
+              src="public/img/logo/logo.svg"
+              alt="myDigiLearn"
+            >
             <div class="flex flex-col">
-              <div class="text-xl font-semibold">myDigiLearn</div>
-              <div class="text-xs text-gray-400">Content Management System</div>
+              <div class="text-xl font-semibold">
+                myDigiLearn
+              </div>
+              <div class="text-xs text-gray-400">
+                Content Management System
+              </div>
             </div>
             <div
               class="border p-1 rounded cursor-pointer"
@@ -19,16 +26,22 @@
               <img
                 src="public/img/icons/arrow-left.svg"
                 alt="Collapse Navbar"
-              />
+              >
             </div>
           </div>
         </div>
 
         <div class="flex h-full space-x-5">
           <div class="navbar-parent">
-            <img src="public/img/icons/home.svg" alt="Home" />
+            <img
+              src="public/img/icons/home.svg"
+              alt="Home"
+            >
 
-            <img src="public/img/avatar.png" alt="Avatar" />
+            <img
+              src="public/img/avatar.png"
+              alt="Avatar"
+            >
           </div>
 
           <div>
@@ -58,7 +71,10 @@
       </div>
 
       <div class="body">
-        <main data-qa="body" class="main">
+        <main
+          data-qa="body"
+          class="main"
+        >
           <slot />
         </main>
 
@@ -117,4 +133,3 @@ export default {
   justify-self: end;
 }
 </style>
-
