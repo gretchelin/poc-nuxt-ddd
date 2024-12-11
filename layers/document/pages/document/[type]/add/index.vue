@@ -157,7 +157,7 @@ import UIButton from '#ui/components/atoms/button';
 import UIBreadcrumb from '#ui/components/atoms/breadcrumb';
 import UIFormInput from '#ui/components/atoms/form/input';
 import UIFormTextarea from '#ui/components/atoms/form/textarea';
-import { createDocument } from '~/layers/document/api/document';
+import { createDocument, upload } from '~/layers/document/api/document';
 
 // Page Setup
 definePageMeta({
@@ -168,6 +168,7 @@ definePageMeta({
 const title = ref('');
 const description = ref('');
 const fileName = ref<string | null>(null);
+const file = ref<File | null>(null);
 
 const router = useRouter();
 const route = useRoute();
@@ -192,6 +193,7 @@ const handleFileUpload = () => {
   fileInput.accept = type === 'pdf' ? '.pdf' : '.ppt';
   fileInput.addEventListener('change', () => {
     if (fileInput.files && fileInput.files[0]) {
+      file.value = fileInput.files[0];
       fileName.value = fileInput.files[0].name;
     }
   });
@@ -204,15 +206,8 @@ const handleDeleteFile = () => {
 
 const { mutate: handleCreateDocument, isPending: isProcessing } = useMutation({
   mutationKey: ['create-document'],
-  mutationFn: async (data: { title: string; description: string }) => {
-    return await createDocument(
-      // TODO: will be refactor after setup aws-sdk
-      {
-        ...data,
-        thumbnail: 'https://d28lr4uffo7b56.cloudfront.net/content/user-upload/file/2024/12/af242747664b5d3beeb32836991b3366d9f00866.pdf',
-        file: 'https://d28lr4uffo7b56.cloudfront.net/content/user-upload/file/2024/12/af242747664b5d3beeb32836991b3366d9f00866.pdf',
-      },
-    );
+  mutationFn: async (data) => {
+    return await createDocument(data);
   },
   onSuccess: () => {
     swal.fire({
@@ -228,10 +223,23 @@ const { mutate: handleCreateDocument, isPending: isProcessing } = useMutation({
   },
 });
 
-const submitForm = () => {
-  handleCreateDocument({
+const submitForm = async () => {
+  const formData = new FormData();
+
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const year = now.getFullYear();
+
+  formData.append('file', file.value);
+  formData.append('folder', `content/user-upload/${type}/${year}/${month}`);
+  const { data } = await upload(formData);
+  const fileUrl = data?.value?.data?.full_path;
+
+  await handleCreateDocument({
     title,
     description,
+    file: fileUrl,
+    thumbnail: fileUrl,
   });
 };
 </script>

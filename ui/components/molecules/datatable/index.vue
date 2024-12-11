@@ -1,6 +1,7 @@
 <template>
   <div>
     <DataTable
+      ref="dataTable"
       :class="tableClass"
       :options="options"
     >
@@ -114,7 +115,7 @@
     </DataTable>
 
     <!-- Custom Pagination Controls Slot -->
-    <div class="mt-4 flex justify-between">
+    <!-- <div class="mt-4 flex justify-between">
       <slot
         name="pagination"
         :current-page="currentPage"
@@ -143,6 +144,7 @@
           <span
             :disabled="page?.value === 1"
             class="text-gray-400 px-4 py-2 rounded-md"
+            @click="setPage(currentPage - 1)"
           >
             &lt; Previous
           </span>
@@ -154,19 +156,21 @@
                 +currentPage === +val ? 'bg-teal-500 text-white' : 'text-gray-700',
                 'px-4 py-2 rounded-md',
               ]"
+              @click="setPage(val)"
             >
               {{ val }}
             </button>
           </div>
           <span
             :disabled="page?.value === totalPages"
+            @click="setPage(currentPage + 1)"
             class="text-teal-500 px-4 py-2 rounded-md"
           >
             Next  &gt;
           </span>
         </div>
       </slot>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -207,11 +211,36 @@ const props = withDefaults(defineProps<IProps>(), {
   itemsPerPage: 10,
 });
 
+const dataTable = ref(null);
 const currentPage = ref(props.currentPage);
 const itemsPerPage = ref(props.itemsPerPage);
 const totalPages = ref(props.totalPages);
 const totalData = ref(props.totalData);
 const itemsPerPageOptions = [10, 20, 50, 100];
+
+onMounted(() => {
+  dataTable.value = dataTable.value.dt;
+
+  // Adjust row numbering on page change
+  dataTable.value.on('draw', function () {
+    currentPage.value = dataTable.value.page.info().page + 1;
+  });
+});
+
+// Watch for changes in rows and update DataTable dynamically
+watch(
+  () => props.rows,
+  (newRows) => {
+    if (dataTable.value) {
+      dataTable.value.clear();
+      newRows.forEach((row: any) => {
+        dataTable.value.row.add(row);
+      });
+      dataTable.value.draw();
+    }
+  },
+  { immediate: true },
+);
 
 const getRowNumber = (index: number) => {
   return (currentPage.value - 1) * itemsPerPage.value + index + 1;

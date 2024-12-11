@@ -35,6 +35,7 @@
     "pdfjs-dist": "^4.9.155",
     "sweetalert2": "^11.14.5",
     "vue": "latest",
+    "vue-pdf-embed": "^2.1.1",
     "yup": "^1.4.0"
   },
   "devDependencies": {

@@ -110,6 +110,7 @@ export default defineNuxtConfig({
     public: {
       enableMock: process.env.NUXT_PUBLIC_ENABLE_MOCK,
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL,
+      storageBaseUrl: process.env.NUXT_PUBLIC_STORAGE_BASE_URL,
     },
   },
 

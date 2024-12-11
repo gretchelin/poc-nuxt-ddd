@@ -93,7 +93,56 @@
           <template #item_updated_at="row">
             {{ dayjs(row.value).format('DD MMM YYYY, HH:mm') }}
           </template>
+
+          <!-- <template v-slot:pagination> -->
+          <!-- </template> -->
         </UIDatatable>
+        <div class="flex items-center space-x-2">
+          <select
+            id="itemsPerPage"
+            v-model="itemsPerPage"
+            class="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm"
+          >
+            <option
+              v-for="option in itemsPerPageOptions"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+          <span class="text-sm text-gray-600">{{ itemRange }}</span>
+        </div>
+
+        <div class="flex justify-between items-center mt-6">
+          <span
+            :disabled="page?.value === 1"
+            class="text-gray-400 px-4 py-2 rounded-md"
+            @click="setPage(currentPage - 1)"
+          >
+            &lt; Previous
+          </span>
+          <div class="flex space-x-2">
+            <button
+              v-for="val in pageTotal"
+              :key="val"
+              :class="[
+                +currentPage === +val ? 'bg-teal-500 text-white' : 'text-gray-700',
+                'px-4 py-2 rounded-md',
+              ]"
+              @click="setPage(val)"
+            >
+              {{ val }}
+            </button>
+          </div>
+          <span
+            :disabled="page?.value === totalPages"
+            class="text-teal-500 px-4 py-2 rounded-md"
+            @click="setPage(currentPage + 1)"
+          >
+            Next  &gt;
+          </span>
+        </div>
       </template>
     </div>
   </div>
@@ -120,6 +169,7 @@ const itemPerPage = ref(10);
 const pageTotal = ref(1);
 const total = ref(0);
 const currentPage = ref(1);
+const itemsPerPageOptions = [10, 20, 50, 100];
 const breadcrumbs = [
   { text: 'Learning Content', href: '' },
   { text: 'Document', href: '/document', active: true },
@@ -136,11 +186,18 @@ const headers = [
   { label: 'Last Updated', key: 'updated_at' },
 ];
 
+const params = ref({
+  type_document: type,
+  page_size: itemPerPage.value,
+  page: currentPage.value,
+  keyword: '',
+});
+
 // Fetch
 const { isLoading, data, refetch } = useQuery({
-  queryKey: ['document-list-get', itemPerPage, page],
+  queryKey: ['document-list-get', itemPerPage, currentPage],
   queryFn: async () => {
-    const { data } = await getDocumentList(type);
+    const { data } = await getDocumentList(params.value);
 
     total.value = data?.pagination?.total_data;
     currentPage.value = data?.pagination?.current_page;
@@ -148,8 +205,23 @@ const { isLoading, data, refetch } = useQuery({
 
     return data?.data || [];
   },
-  retry: 2,
 });
+
+// const handlePagination = (val) => {
+//   currentPage.value = val
+//   refetch()
+// }
+onUpdated(() => {
+  // text content should be the same as current `count.value`
+  // refetch()
+});
+
+const setPage = (page: number) => {
+  if (page > 0 && page <= pageTotal.value) {
+    currentPage.value = page;
+    params.value.page = page;
+  }
+};
 
 const handleAdd = () => {
   router.push(`/document/${type}/add`);
@@ -157,8 +229,7 @@ const handleAdd = () => {
 
 const handleDetail = (row: any, index: number) => {
   // Handle the detail action for the row
-  // TODO
-  console.log('Detail row:', row, index);
+  router.push(`/document/${type}/detail/${row.id}`);
 };
 
 const handleEdit = (row: any, index: number) => {
@@ -188,7 +259,6 @@ const { mutate: handleDeleteDocument, isPending: isProcessing } = useMutation({
 
 const handleDelete = (row: any, index: number) => {
   // Handle the delete action for the row
-  console.log('Deleting row:', row, index);
   handleDeleteDocument(row.id);
 };
 </script>
