@@ -17,7 +17,7 @@
           />
         </UIButton>
         <UIBreadcrumb
-          title="Add PDF"
+          :title="breadcrumbTitle"
           :items="breadcrumbs"
         />
       </div>
@@ -34,35 +34,22 @@
           <form @submit.prevent="submitForm">
             <!-- Title Field -->
             <div class="mb-4">
-              <label
-                for="title"
-                class="block text-sm font-medium text-gray-700"
-              >Title</label>
-              <input
+              <UIFormInput
                 id="title"
                 v-model="title"
-                type="text"
+                label="Title"
                 placeholder="Enter pdf title"
-                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500"
-              >
+              />
             </div>
 
             <!-- Description Field -->
             <div class="mb-4">
-              <label
-                for="description"
-                class="block text-sm font-medium text-gray-700"
-              >Description</label>
-              <textarea
+              <UIFormTextarea
                 id="description"
                 v-model="description"
-                rows="4"
+                label="Description"
                 placeholder="Enter pdf description"
-                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500"
               />
-              <div class="text-right text-sm text-gray-500">
-                {{ description.length }} / 255
-              </div>
             </div>
 
             <!-- File Upload -->
@@ -165,8 +152,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useMutation } from '@tanstack/vue-query';
 import UIButton from '#ui/components/atoms/button';
 import UIBreadcrumb from '#ui/components/atoms/breadcrumb';
+import UIFormInput from '#ui/components/atoms/form/input';
+import UIFormTextarea from '#ui/components/atoms/form/textarea';
+import { createDocument } from '~/layers/document/api/document';
 
 // Page Setup
 definePageMeta({
@@ -178,8 +169,11 @@ const title = ref('');
 const description = ref('');
 const fileName = ref<string | null>(null);
 
+const router = useRouter();
 const route = useRoute();
 const type = route?.params?.type;
+const breadcrumbTitle = `Add ${type.toUpperCase()}`;
+const swal = useSwal();
 
 // Data
 const breadcrumbs = [
@@ -189,7 +183,7 @@ const breadcrumbs = [
 ];
 
 const handleBack = () => {
-  route.push(`/document/${type}`);
+  router.push(`/document/${type}`);
 };
 
 const handleFileUpload = () => {
@@ -206,6 +200,39 @@ const handleFileUpload = () => {
 
 const handleDeleteFile = () => {
   fileName.value = '';
+};
+
+const { mutate: handleCreateDocument, isPending: isProcessing } = useMutation({
+  mutationKey: ['create-document'],
+  mutationFn: async (data: { title: string; description: string }) => {
+    return await createDocument(
+      // TODO: will be refactor after setup aws-sdk
+      {
+        ...data,
+        thumbnail: 'https://d28lr4uffo7b56.cloudfront.net/content/user-upload/file/2024/12/af242747664b5d3beeb32836991b3366d9f00866.pdf',
+        file: 'https://d28lr4uffo7b56.cloudfront.net/content/user-upload/file/2024/12/af242747664b5d3beeb32836991b3366d9f00866.pdf',
+      },
+    );
+  },
+  onSuccess: () => {
+    swal.fire({
+      position: 'top-end',
+      title: 'Success',
+      icon: 'success',
+      timer: 2000,
+    });
+    router.push(`/document/${type}`);
+  },
+  onError: (err) => {
+    console.error(err);
+  },
+});
+
+const submitForm = () => {
+  handleCreateDocument({
+    title,
+    description,
+  });
 };
 </script>
 

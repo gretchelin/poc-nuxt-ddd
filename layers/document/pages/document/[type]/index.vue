@@ -76,148 +76,37 @@
         <span>Fetching data....</span>
       </div>
       <template v-else>
-        <table class="min-w-full table-auto bg-white rounded-lg">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="p-4 text-left">
-                No
-              </th>
-              <th class="p-4 text-left">
-                Title
-              </th>
-              <th class="p-4 text-left">
-                Created by
-              </th>
-              <th class="p-4 text-left">
-                Created
-              </th>
-              <th class="p-4 text-left">
-                Last Updated
-              </th>
-              <th class="p-4 text-left">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(document, idx) in data"
-              :key="document?.id"
-              class="border-b"
-            >
-              <td class="p-4">
-                {{ idx + 1 }}
-              </td>
-              <td class="p-4">
-                {{ document.title }}
-              </td>
-              <td class="p-4">
-                {{ document.created_by }}
-              </td>
-              <td class="p-4">
-                {{ document.created_at }}
-              </td>
-              <td class="p-4">
-                {{ document.updated_at }}
-              </td>
-              <td class="p-4 flex justify-start gap-4">
-                <NuxtLink :to="`/document/detail/${document?.id}`">
-                  <Icon
-                    name="uil-eye"
-                    width="25"
-                    height="20"
-                    mode="svg"
-                    class="text-gray-500"
-                  />
-                </NuxtLink>
-                <Icon
-                  name="uil-pen"
-                  width="25"
-                  height="20"
-                  mode="svg"
-                  class="text-gray-500"
-                />
-                <Icon
-                  name="uil-trash"
-                  width="25"
-                  height="20"
-                  mode="svg"
-                  class="text-gray-500"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div
-          v-if="!data"
-          class="flex flex-col gap-1 justify-center items-center"
+        <UIDatatable
+          :headers="headers"
+          :rows="data"
+          :detail-action="handleDetail"
+          :edit-action="handleEdit"
+          :delete-action="handleDelete"
+          :current-page="currentPage"
+          :total-pages="pageTotal"
+          :total-data="total"
+          :items-per-page="itemPerPage"
         >
-          <img
-            src="public/img/empty-state.svg"
-            alt="No Data"
-          >
-          <span class="font-semibold">No Data Available</span>
-          <span class="text-sm text-gray-700">Please add your first entry to get started.</span>
-        </div>
-
-        <div
-          v-if="data?.length > 0"
-          class="flex justify-between"
-        >
-          <div class="flex items-center space-x-2">
-            <select
-              id="itemsPerPage"
-              v-model="itemPerPage"
-              class="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm"
-            >
-              <option
-                v-for="option in itemsPerPageOptions"
-                :key="option"
-                :value="option"
-              >
-                {{ option }}
-              </option>
-            </select>
-            <span class="text-sm text-gray-600">{{ itemRange }}</span>
-          </div>
-
-          <div class="flex justify-between items-center mt-6">
-            <span
-              :disabled="page?.value === 1"
-              class="text-gray-400 px-4 py-2 rounded-md"
-            >
-              &lt; Previous
-            </span>
-            <div class="flex space-x-2">
-              <button
-                v-for="val in pageTotal"
-                :key="val"
-                :class="[
-                  +currentPage === +val ? 'bg-teal-500 text-white' : 'text-gray-700',
-                  'px-4 py-2 rounded-md',
-                ]"
-              >
-                {{ page }}
-              </button>
-            </div>
-            <span
-              :disabled="page?.value === pageTotal"
-              class="text-teal-500 px-4 py-2 rounded-md"
-            >
-              Next  &gt;
-            </span>
-          </div>
-        </div>
+          <template #item_created_at="row">
+            {{ dayjs(row.value).format('DD MMM YYYY, HH:mm') }}
+          </template>
+          <template #item_updated_at="row">
+            {{ dayjs(row.value).format('DD MMM YYYY, HH:mm') }}
+          </template>
+        </UIDatatable>
       </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useQueryClient, useQuery } from '@tanstack/vue-query';
+import { useQueryClient, useQuery, useMutation } from '@tanstack/vue-query';
+import dayjs from 'dayjs';
 import { getDocumentList } from '#document/api/document.ts';
 import UIButton from '#ui/components/atoms/button';
 import UIBreadcrumb from '#ui/components/atoms/breadcrumb';
+import UIDatatable from '#ui/components/molecules/datatable';
+import { deleteDocument } from '~/layers/document/api/document';
 
 // Page Setup
 definePageMeta({
@@ -235,23 +124,20 @@ const breadcrumbs = [
   { text: 'Learning Content', href: '' },
   { text: 'Document', href: '/document', active: true },
 ];
+const queryClient = useQueryClient();
 const route = useRoute();
 const type = route?.params?.type;
 const router = useRouter();
-console.log(type, 'ea');
-const itemsPerPageOptions = [10, 20, 50, 100];
-
-const handleAdd = () => {
-  router.push(`/document/${type}/add`);
-};
-
-// Computed
-const itemRange = computed(() => {
-  return `${(page.value - 1) * itemPerPage.value || 1} - ${page.value * itemPerPage.value} of ${total.value}`;
-});
+const swal = useSwal();
+const headers = [
+  { label: 'Title', key: 'title' },
+  { label: 'Created By', key: 'created_by' },
+  { label: 'Created', key: 'created_at' },
+  { label: 'Last Updated', key: 'updated_at' },
+];
 
 // Fetch
-const { isLoading, data } = useQuery({
+const { isLoading, data, refetch } = useQuery({
   queryKey: ['document-list-get', itemPerPage, page],
   queryFn: async () => {
     const { data } = await getDocumentList(type);
@@ -264,6 +150,47 @@ const { isLoading, data } = useQuery({
   },
   retry: 2,
 });
+
+const handleAdd = () => {
+  router.push(`/document/${type}/add`);
+};
+
+const handleDetail = (row: any, index: number) => {
+  // Handle the detail action for the row
+  // TODO
+  console.log('Detail row:', row, index);
+};
+
+const handleEdit = (row: any, index: number) => {
+  // Handle the edit action for the row
+  // TODO
+  console.log('Editing row:', row, index);
+};
+
+const { mutate: handleDeleteDocument, isPending: isProcessing } = useMutation({
+  mutationKey: ['delete-document'],
+  mutationFn: async (id: number) => {
+    return await deleteDocument(id);
+  },
+  onSuccess: () => {
+    swal.fire({
+      position: 'top-end',
+      title: 'Success',
+      icon: 'success',
+      timer: 2000,
+    });
+    refetch();
+  },
+  onError: (err) => {
+    console.error(err);
+  },
+});
+
+const handleDelete = (row: any, index: number) => {
+  // Handle the delete action for the row
+  console.log('Deleting row:', row, index);
+  handleDeleteDocument(row.id);
+};
 </script>
 
 <style lang="postcss" scoped>

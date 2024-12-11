@@ -62,6 +62,12 @@
       :items="breadcrumbs"
     />
 
+    <UIDatatable
+      :headers="headers"
+      :rows="rows"
+    />
+
+    <hr>
     <div>
       Page:
       <ul class="list-none flex gap-2 flex-wrap">
@@ -134,6 +140,7 @@ import { useQueryClient, useQuery } from '@tanstack/vue-query';
 import EntryCard from '#playground/components/EntryCard.vue';
 import UIButton from '#ui/components/atoms/button';
 import UIBreadcrumb from '#ui/components/atoms/breadcrumb';
+import UIDatatable from '#ui/components/molecules/datatable';
 import { usePlaygroundStore } from '#playground/stores/playground';
 
 // Page Setup
@@ -152,6 +159,18 @@ const playgroundStore = usePlaygroundStore();
 const breadcrumbs = [
   { text: 'Learning Content', href: '' },
   { text: 'Document', href: '/document', active: true },
+];
+const headers = [
+  { label: 'Name', key: 'name' },
+  { label: 'Age', key: 'age' },
+  { label: 'Country', key: 'country' },
+];
+
+const rows = [
+  { name: 'John Doe', age: 28, country: 'USA' },
+  { name: 'Jane Smith', age: 34, country: 'Canada' },
+  { name: 'Sam Johnson', age: 40, country: 'UK' },
+  { name: 'Anna Lee', age: 22, country: 'Australia' },
 ];
 
 // Computed
