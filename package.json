@@ -27,6 +27,7 @@
     "@vee-validate/yup": "^4.13.2",
     "@vueuse/core": "^11.0.3",
     "@vueuse/nuxt": "^11.0.3",
+    "datatables.net-vue3": "^3.0.2",
     "dayjs": "^1.11.13",
     "floating-vue": "^5.2.2",
     "maska": "^3.0.2",
