@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DataTable
+    <table
       ref="dataTable"
       :class="tableClass"
       :options="options"
@@ -73,7 +73,7 @@
           <!-- Custom Row Actions (e.g., Detail, Edit, Delete) -->
           <td
             v-if="withActions"
-            class="flex justify-start gap-4"
+            class="flex justify-start gap-4 border-none"
           >
             <slot
               name="actions"
@@ -112,13 +112,13 @@
           </td>
         </tr>
       </tbody>
-    </DataTable>
+    </table>
 
     <!-- Custom Pagination Controls Slot -->
-    <!-- <div class="mt-4 flex justify-between">
+    <div class="mt-6 flex justify-between">
       <slot
         name="pagination"
-        :current-page="currentPage"
+        :curren-page="currentPage"
         :total-pages="totalPages"
         :set-page="setPage"
         :set-items-per-page="setItemsPerPage"
@@ -128,6 +128,7 @@
             id="itemsPerPage"
             v-model="itemsPerPage"
             class="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm"
+            @change="setItemsPerPage"
           >
             <option
               v-for="option in itemsPerPageOptions"
@@ -140,7 +141,7 @@
           <span class="text-sm text-gray-600">{{ itemRange }}</span>
         </div>
 
-        <div class="flex justify-between items-center mt-6">
+        <div class="flex justify-between items-center">
           <span
             :disabled="page?.value === 1"
             class="text-gray-400 px-4 py-2 rounded-md"
@@ -163,23 +164,19 @@
           </div>
           <span
             :disabled="page?.value === totalPages"
-            @click="setPage(currentPage + 1)"
             class="text-teal-500 px-4 py-2 rounded-md"
+            @click="setPage(currentPage + 1)"
           >
             Next  &gt;
           </span>
         </div>
       </slot>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import DataTable from 'datatables.net-vue3';
-import DataTablesCore from 'datatables.net';
 import emptyState from 'public/img/empty-state.svg';
-
-DataTable.use(DataTablesCore);
 
 interface Header {
   label: string;
@@ -199,6 +196,8 @@ interface IProps {
   detailAction?: (row: any, index: number) => void;
   editAction?: (row: any, index: number) => void;
   deleteAction?: (row: any, index: number) => void;
+  setCurrentPage?: (page: number) => void;
+  setItemsPerPage?: (itemsPerPage: number) => void;
 }
 
 const props = withDefaults(defineProps<IProps>(), {
@@ -218,32 +217,8 @@ const totalPages = ref(props.totalPages);
 const totalData = ref(props.totalData);
 const itemsPerPageOptions = [10, 20, 50, 100];
 
-onMounted(() => {
-  dataTable.value = dataTable.value.dt;
-
-  // Adjust row numbering on page change
-  dataTable.value.on('draw', function () {
-    currentPage.value = dataTable.value.page.info().page + 1;
-  });
-});
-
-// Watch for changes in rows and update DataTable dynamically
-watch(
-  () => props.rows,
-  (newRows) => {
-    if (dataTable.value) {
-      dataTable.value.clear();
-      newRows.forEach((row: any) => {
-        dataTable.value.row.add(row);
-      });
-      dataTable.value.draw();
-    }
-  },
-  { immediate: true },
-);
-
 const getRowNumber = (index: number) => {
-  return (currentPage.value - 1) * itemsPerPage.value + index + 1;
+  return (props.currentPage - 1) * props.itemsPerPage + index + 1;
 };
 
 const emptyStateHtml = `
@@ -285,18 +260,24 @@ const handleDelete = (row: any, rowIndex: number) => {
 };
 
 const itemRange = computed(() => {
-  return `${(itemsPerPage.value - 1) * itemsPerPage.value || 1} - ${itemsPerPage.value * itemsPerPage.value} of ${totalData.value}`;
+  return `${(currentPage.value - 1) * itemsPerPage.value + 1} - ${Math.min(currentPage.value * itemsPerPage.value, totalData.value)} of ${totalData.value}`;
 });
 
 const setPage = (page: number) => {
   if (page > 0 && page <= props.totalPages) {
     currentPage.value = page;
   }
+  if (props.setCurrentPage) {
+    props.setCurrentPage(page);
+  }
 };
 
 // Set the items per page
-const setItemsPerPage = (newItemsPerPage: number) => {
-  itemsPerPage.value = newItemsPerPage;
+const setItemsPerPage = (event: any) => {
+  if (props.setItemsPerPage) {
+    props.setItemsPerPage(event.target.value);
+  }
+  itemsPerPage.value = event.target.value;
 };
 </script>
 
