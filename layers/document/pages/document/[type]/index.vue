@@ -86,6 +86,8 @@
           :total-pages="pageTotal"
           :total-data="total"
           :items-per-page="itemPerPage"
+          :set-current-page="handleSetCurrentPage"
+          :set-items-per-page="handleSetItemsPerPage"
         >
           <template #item_created_at="row">
             {{ dayjs(row.value).format('DD MMM YYYY, HH:mm') }}
@@ -93,56 +95,7 @@
           <template #item_updated_at="row">
             {{ dayjs(row.value).format('DD MMM YYYY, HH:mm') }}
           </template>
-
-          <!-- <template v-slot:pagination> -->
-          <!-- </template> -->
         </UIDatatable>
-        <div class="flex items-center space-x-2">
-          <select
-            id="itemsPerPage"
-            v-model="itemsPerPage"
-            class="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm"
-          >
-            <option
-              v-for="option in itemsPerPageOptions"
-              :key="option"
-              :value="option"
-            >
-              {{ option }}
-            </option>
-          </select>
-          <span class="text-sm text-gray-600">{{ itemRange }}</span>
-        </div>
-
-        <div class="flex justify-between items-center mt-6">
-          <span
-            :disabled="page?.value === 1"
-            class="text-gray-400 px-4 py-2 rounded-md"
-            @click="setPage(currentPage - 1)"
-          >
-            &lt; Previous
-          </span>
-          <div class="flex space-x-2">
-            <button
-              v-for="val in pageTotal"
-              :key="val"
-              :class="[
-                +currentPage === +val ? 'bg-teal-500 text-white' : 'text-gray-700',
-                'px-4 py-2 rounded-md',
-              ]"
-              @click="setPage(val)"
-            >
-              {{ val }}
-            </button>
-          </div>
-          <span
-            :disabled="page?.value === totalPages"
-            class="text-teal-500 px-4 py-2 rounded-md"
-            @click="setPage(currentPage + 1)"
-          >
-            Next  &gt;
-          </span>
-        </div>
       </template>
     </div>
   </div>
@@ -201,19 +154,10 @@ const { isLoading, data, refetch } = useQuery({
 
     total.value = data?.pagination?.total_data;
     currentPage.value = data?.pagination?.current_page;
-    pageTotal.value = Math.ceil(data?.pagination?.total_data / 10) || 1;
+    pageTotal.value = data?.pagination?.total_pages;
 
     return data?.data || [];
   },
-});
-
-// const handlePagination = (val) => {
-//   currentPage.value = val
-//   refetch()
-// }
-onUpdated(() => {
-  // text content should be the same as current `count.value`
-  // refetch()
 });
 
 const setPage = (page: number) => {
@@ -221,6 +165,17 @@ const setPage = (page: number) => {
     currentPage.value = page;
     params.value.page = page;
   }
+};
+
+const handleSetCurrentPage = (page: number) => {
+  if (page > 0 && page <= pageTotal.value) {
+    currentPage.value = page;
+    params.value.page = page;
+  }
+};
+const handleSetItemsPerPage = (itemsPerPage: number) => {
+  itemPerPage.value = itemsPerPage;
+  params.value.page_size = itemsPerPage;
 };
 
 const handleAdd = () => {
@@ -234,8 +189,7 @@ const handleDetail = (row: any, index: number) => {
 
 const handleEdit = (row: any, index: number) => {
   // Handle the edit action for the row
-  // TODO
-  console.log('Editing row:', row, index);
+  router.push(`/document/${type}/edit/${row.id}`);
 };
 
 const { mutate: handleDeleteDocument, isPending: isProcessing } = useMutation({

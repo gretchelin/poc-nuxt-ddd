@@ -70,3 +70,17 @@ export const getDocumentById = async (id) => {
     },
   });
 };
+
+export const editDocument = async (data: { title: string; description: string; thumbnail: string; file: string }, id: number) => {
+  const authCookie = useCookie('token');
+  const env = useRuntimeConfig();
+
+  const token = authCookie?.value;
+  return await useFetch(`${env.public.apiBaseUrl}cms/v2/files/upload/${id}`, {
+    headers: {
+      Authorization: token,
+    },
+    method: 'patch',
+    body: data,
+  });
+};
