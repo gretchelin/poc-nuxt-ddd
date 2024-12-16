@@ -34,12 +34,6 @@ export default defineNuxtConfig({
       },
     },
   },
-  // setup storybook
-  storybook: {
-    url: 'http://localhost:6006',
-    port: 6006,
-  },
-
   // ========================================
   // set up dev server proxy
   // ========================================
