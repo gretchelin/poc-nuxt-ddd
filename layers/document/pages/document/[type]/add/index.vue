@@ -53,77 +53,14 @@
             </div>
 
             <!-- File Upload -->
-            <div class="mb-4">
-              <label
-                for="pdfUpload"
-                class="block text-sm font-medium text-gray-700"
-              >Upload {{ type.toUpperCase() }}</label>
-              <div class="flex items-center space-x-2 justify-between border p-2 rounded">
-                <div class="flex space-x-2">
-                  <UIButton
-                    v-if="fileName"
-                    color="secondary"
-                    size="small"
-                    type="button"
-                  >
-                    <Icon
-                      name="mdi-file"
-                      width="20"
-                      height="20"
-                      mode="svg"
-                      class="text-gray-400"
-                    />
-                  </UIButton>
-                  <UIButton
-                    v-else
-                    color="default"
-                    size="small"
-                    type="button"
-                    class="inline-flex items-center justify-center px-4 py-2 text-sm bg-brand-primary"
-                  >
-                    <Icon
-                      name="mdi-upload"
-                      width="20"
-                      height="20"
-                      mode="svg"
-                      class="text-teal-500"
-                    />
-                  </UIButton>
-                  <div class="flex flex-col text-xs">
-                    <span>{{ fileName ? fileName : 'Upload File' }}</span>
-                    <span class="text-gray-400">{{ type.toUpperCase() }}</span>
-                  </div>
-                </div>
-
-                <Icon
-                  v-if="fileName"
-                  name="mdi-delete"
-                  width="25"
-                  height="20"
-                  mode="svg"
-                  class="text-gray-400 cursor-pointer"
-                  @click="handleDeleteFile"
-                />
-                <UIButton
-                  v-else
-                  color="default"
-                  variant="outlined"
-                  size="small"
-                  type="button"
-                  class="inline-flex items-center justify-center px-4 py-2 text-sm bg-white border-teal-500 text-teal-500 font-semibold rounded-md"
-                  @click="handleFileUpload"
-                >
-                  <Icon
-                    name="mdi-upload"
-                    width="25"
-                    height="20"
-                    mode="svg"
-                    class="text-teal-500"
-                  />
-                  Upload
-                </UIButton>
-              </div>
-            </div>
+            <UIFileUploadCompact
+              class="mb-4"
+              :for="file-upload-compact"
+              :label="uploadLabel"
+              :file-type="fileType"
+              :handle-file-upload="handleFileUpload"
+              :accept="accept"
+            />
 
             <!-- Action Buttons -->
             <div class="flex justify-end space-x-4">
@@ -153,10 +90,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useMutation } from '@tanstack/vue-query';
+import * as yup from 'yup';
 import UIButton from '#ui/components/atoms/button';
 import UIBreadcrumb from '#ui/components/atoms/breadcrumb';
 import UIFormInput from '#ui/components/atoms/form/input';
 import UIFormTextarea from '#ui/components/atoms/form/textarea';
+import UIFileUploadCompact from '#ui/components/molecules/fileupload/compact';
 import { createDocument, upload } from '~/layers/document/api/document';
 
 // Page Setup
@@ -167,14 +106,27 @@ definePageMeta({
 
 const title = ref('');
 const description = ref('');
-const fileName = ref<string | null>(null);
 const file = ref<File | null>(null);
 
 const router = useRouter();
 const route = useRoute();
 const type = route?.params?.type;
+const uploadLabel = `Uplaod ${type.toUpperCase()}`;
+const fileType = type.toUpperCase();
+const accept = type === 'pdf' ? '.pdf' : '.ppt';
 const breadcrumbTitle = `Add ${type.toUpperCase()}`;
 const swal = useSwal();
+const toast = swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast: any) => {
+    toast.onmouseenter = swal.stopTimer;
+    toast.onmouseleave = swal.resumeTimer;
+  },
+});
 
 // Data
 const breadcrumbs = [
@@ -187,21 +139,8 @@ const handleBack = () => {
   router.push(`/document/${type}`);
 };
 
-const handleFileUpload = () => {
-  const fileInput = document.createElement('input');
-  fileInput.type = 'file';
-  fileInput.accept = type === 'pdf' ? '.pdf' : '.ppt';
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files && fileInput.files[0]) {
-      file.value = fileInput.files[0];
-      fileName.value = fileInput.files[0].name;
-    }
-  });
-  fileInput.click();
-};
-
-const handleDeleteFile = () => {
-  fileName.value = '';
+const handleFileUpload = (value: any) => {
+  file.value = value;
 };
 
 const { mutate: handleCreateDocument, isPending: isProcessing } = useMutation({
@@ -210,16 +149,48 @@ const { mutate: handleCreateDocument, isPending: isProcessing } = useMutation({
     return await createDocument(data);
   },
   onSuccess: () => {
-    swal.fire({
-      position: 'top-end',
-      title: 'Success',
+    toast.fire({
       icon: 'success',
-      timer: 2000,
+      title: `${type.toUpperCase()} successfully added`,
     });
     router.push(`/document/${type}`);
   },
   onError: (err) => {
-    console.error(err);
+    toast.fire({
+      icon: 'error',
+      title: `Failed to add ${type.toUpperCase()} `,
+    });
+  },
+});
+
+// Validation schema with Yup
+const validationSchema = yup.object().shape({
+  title: yup
+    .string()
+    .required('Title is required')
+    .min(3, 'Title must be at least 3 characters long')
+    .max(100, 'Title can be up to 100 characters long'),
+  description: yup
+    .string()
+    .required('Description is required')
+    .max(255, 'Description can be up to 255 characters long'),
+  file: yup
+    .mixed()
+    .required('PDF file is required'),
+});
+
+// setup form
+const {
+  defineField,
+  handleSubmit,
+  errors: formErrors,
+  meta,
+} = useForm({
+  validationSchema: toTypedSchema(validationSchema),
+  initialValues: {
+    title: title.value,
+    description: description.value,
+    file: file,
   },
 });
 

@@ -132,6 +132,17 @@ const route = useRoute();
 const type = route?.params?.type;
 const router = useRouter();
 const swal = useSwal();
+const toast = swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast: any) => {
+    toast.onmouseenter = swal.stopTimer;
+    toast.onmouseleave = swal.resumeTimer;
+  },
+});
 const headers = [
   { label: 'Title', key: 'title' },
   { label: 'Created By', key: 'created_by' },
@@ -198,22 +209,35 @@ const { mutate: handleDeleteDocument, isPending: isProcessing } = useMutation({
     return await deleteDocument(id);
   },
   onSuccess: () => {
-    swal.fire({
-      position: 'top-end',
-      title: 'Success',
+    toast.fire({
       icon: 'success',
-      timer: 2000,
+      title: `${type.toUpperCase()} successfully deleted`,
     });
     refetch();
   },
   onError: (err) => {
-    console.error(err);
+    toast.fire({
+      icon: 'error',
+      title: `Failed to delete ${type.toUpperCase()} `,
+    });
   },
 });
 
 const handleDelete = (row: any, index: number) => {
   // Handle the delete action for the row
-  handleDeleteDocument(row.id);
+  swal.fire({
+    title: 'Delete Document',
+    text: `Are you sure you want to delete this document? "${row.title}"`,
+    icon: 'error',
+    showCancelButton: true,
+    confirmButtonColor: '#DA4A4A',
+    cancelButtonColor: '#EAEAEA',
+    confirmButtonText: 'Delete',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      handleDeleteDocument(row.id);
+    }
+  });
 };
 </script>
 

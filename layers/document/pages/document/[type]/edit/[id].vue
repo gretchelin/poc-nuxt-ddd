@@ -53,77 +53,15 @@
             </div>
 
             <!-- File Upload -->
-            <div class="mb-4">
-              <label
-                for="pdfUpload"
-                class="block text-sm font-medium text-gray-700"
-              >Upload {{ type.toUpperCase() }}</label>
-              <div class="flex items-center space-x-2 justify-between border p-2 rounded">
-                <div class="flex space-x-2">
-                  <UIButton
-                    v-if="fileName"
-                    color="secondary"
-                    size="small"
-                    type="button"
-                  >
-                    <Icon
-                      name="mdi-file"
-                      width="20"
-                      height="20"
-                      mode="svg"
-                      class="text-gray-400"
-                    />
-                  </UIButton>
-                  <UIButton
-                    v-else
-                    color="default"
-                    size="small"
-                    type="button"
-                    class="inline-flex items-center justify-center px-4 py-2 text-sm bg-brand-primary"
-                  >
-                    <Icon
-                      name="mdi-upload"
-                      width="20"
-                      height="20"
-                      mode="svg"
-                      class="text-teal-500"
-                    />
-                  </UIButton>
-                  <div class="flex flex-col text-xs">
-                    <span>{{ fileName ? fileName : 'Upload File' }}</span>
-                    <span class="text-gray-400">{{ type.toUpperCase() }}</span>
-                  </div>
-                </div>
-
-                <Icon
-                  v-if="fileName"
-                  name="mdi-delete"
-                  width="25"
-                  height="20"
-                  mode="svg"
-                  class="text-gray-400 cursor-pointer"
-                  @click="handleDeleteFile"
-                />
-                <UIButton
-                  v-else
-                  color="default"
-                  variant="outlined"
-                  size="small"
-                  type="button"
-                  class="inline-flex items-center justify-center px-4 py-2 text-sm bg-white border-teal-500 text-teal-500 font-semibold rounded-md"
-                  @click="handleFileUpload"
-                >
-                  <Icon
-                    name="mdi-upload"
-                    width="25"
-                    height="20"
-                    mode="svg"
-                    class="text-teal-500"
-                  />
-                  Upload
-                </UIButton>
-              </div>
-            </div>
+            <UIFileUploadCompact
+              class="mb-4"
+              :for="file-upload-compact"
+              :value="fileName"
+              :label="uploadLabel"
+              :file-type="fileType"
+              :handle-file-upload="handleFileUpload"
+              :accept="accept"
+            />
 
             <!-- Action Buttons -->
             <div class="flex justify-end space-x-4">
@@ -150,6 +88,7 @@ import UIButton from '#ui/components/atoms/button';
 import UIBreadcrumb from '#ui/components/atoms/breadcrumb';
 import UIFormInput from '#ui/components/atoms/form/input';
 import UIFormTextarea from '#ui/components/atoms/form/textarea';
+import UIFileUploadCompact from '#ui/components/molecules/fileupload/compact';
 import { editDocument, getDocumentById, upload } from '~/layers/document/api/document';
 
 // Page Setup
@@ -167,8 +106,23 @@ const file = ref<File | null>(null);
 const router = useRouter();
 const route = useRoute();
 const { type, id } = route?.params;
+const uploadLabel = `Uplaod ${type.toUpperCase()}`;
+const fileType = type.toUpperCase();
+const accept = type === 'pdf' ? '.pdf' : '.ppt';
 const breadcrumbTitle = `Edit ${type.toUpperCase()}`;
 const swal = useSwal();
+
+const toast = swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast: any) => {
+    toast.onmouseenter = swal.stopTimer;
+    toast.onmouseleave = swal.resumeTimer;
+  },
+});
 
 // Data
 const breadcrumbs = [
@@ -181,21 +135,8 @@ const handleBack = () => {
   router.push(`/document/${type}`);
 };
 
-const handleFileUpload = () => {
-  const fileInput = document.createElement('input');
-  fileInput.type = 'file';
-  fileInput.accept = type === 'pdf' ? '.pdf' : '.ppt';
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files && fileInput.files[0]) {
-      file.value = fileInput.files[0];
-      fileName.value = fileInput.files[0].name;
-    }
-  });
-  fileInput.click();
-};
-
-const handleDeleteFile = () => {
-  fileName.value = '';
+const handleFileUpload = (value) => {
+  file.value = value;
 };
 
 const { isLoading, data } = useQuery({
@@ -216,16 +157,31 @@ const { mutate: handleEditDocument, isPending: isProcessing } = useMutation({
     return await editDocument(data, id);
   },
   onSuccess: () => {
+    // Handle the delete action for the row
     swal.fire({
-      position: 'top-end',
-      title: 'Success',
-      icon: 'success',
-      timer: 2000,
+      title: 'Save Changes?',
+      text: `You are about to save your changes. Once saved, they will be applied.`,
+      icon: 'primary',
+      showCancelButton: true,
+      confirmButtonColor: '#4C7CE5',
+      cancelButtonColor: '#EAEAEA',
+      confirmButtonText: 'Save',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        toast.fire({
+          icon: 'success',
+          title: `${type.toUpperCase()} successfully saved`,
+        });
+
+        router.push(`/document/${type}`);
+      }
     });
-    router.push(`/document/${type}`);
   },
   onError: (err) => {
-    console.error(err);
+    toast.fire({
+      icon: 'error',
+      title: `Failed to save ${type.toUpperCase()} `,
+    });
   },
 });
 
