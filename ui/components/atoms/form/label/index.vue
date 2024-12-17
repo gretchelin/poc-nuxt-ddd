@@ -18,7 +18,3 @@ const props = withDefaults(defineProps<IProps>(), {
   text: '',
 });
 </script>
-
-<style scoped>
-/* Optional additional styling can go here */
-</style>

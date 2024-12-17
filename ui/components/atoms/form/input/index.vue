@@ -39,7 +39,3 @@ const updateValue = (event: Event) => {
   emit('update:modelValue', input.value);
 };
 </script>
-
-<style scoped>
-/* Optional additional styling can go here */
-</style>

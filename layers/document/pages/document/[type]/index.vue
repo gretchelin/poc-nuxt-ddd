@@ -55,8 +55,12 @@
           <UIButton
 
             color="secondary"
-            class="text-md text-gray-700"
+            class="text-sm text-gray-500"
           >
+            <img
+              src="public/img/icons/filter.svg"
+              alt="filter"
+            >
             Filter
           </UIButton>
         </div>
@@ -240,7 +244,3 @@ const handleDelete = (row: any, index: number) => {
   });
 };
 </script>
-
-<style lang="postcss" scoped>
-
-</style>
