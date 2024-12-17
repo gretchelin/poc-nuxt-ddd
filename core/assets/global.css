@@ -4,18 +4,18 @@
 
 /* Assign tailwind color to CSS variable */
 :root {
-  --color-primary-25: ##f7f7f7;
-  --color-primary-50: #f8fafc;
-  --color-primary-100: #f1f5f9;
-  --color-primary-200: #e2e8f0;
-  --color-primary-300: #cbd5e1;
-  --color-primary-400: #94a3b8;
-  --color-primary-500: #64748b;
-  --color-primary-600: #475569;
-  --color-primary-700: #334155;
-  --color-primary-800: #1e293b;
-  --color-primary-900: #0f172a;
-  --color-primary-950: #020617;
+  --color-primary-25: #F0FFFB;
+  --color-primary-50: #E2FEF7;
+  --color-primary-100: #D4FCF3;
+  --color-primary-200: #94F7E9;
+  --color-primary-300: #5DE8E0;
+  --color-primary-400: #34CFD2;
+  --color-primary-500: #00A3B5;
+  --color-primary-600: #007F9B;
+  --color-primary-700: #006082;
+  --color-primary-800: #004568;
+  --color-primary-900: #003256;
+  --color-primary-950: #00243D;
 
   --color-secondary-25: #f7f7f7;
   --color-secondary-50: #f8fafc;
@@ -35,7 +35,7 @@
 
 @layer components {
   .bg-primary {
-    @apply base-white dark:bg-gray-900 hover:bg-primary-25 focus:bg-primary-50;
+    @apply dark:bg-gray-900 hover:bg-primary-25 focus:bg-primary-50;
   }
 
   .bg-dark-secondary {
