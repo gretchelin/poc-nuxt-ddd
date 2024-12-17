@@ -1,7 +1,7 @@
 import { useCookie } from 'nuxt/app';
 import { useLocalStorage } from '@vueuse/core';
 import { postLogin } from '../api/auth';
-import { AUTH_COOKIE_NAME, AUTH_STATE_USER_NAME, AUTH_COOKIE_EXPIRED_AT, AUTH_COOKIE_USER_INFO } from '#auth/config/constants';
+import { AUTH_COOKIE_NAME, LS_USER_INFO, AUTH_COOKIE_EXPIRED_AT } from '#auth/config/constants';
 
 export default function () {
   const authStore = useAppAuthStore();
@@ -10,18 +10,18 @@ export default function () {
     secure: true,
     maxAge: 24 * 60 * 60,
   });
-  const userInfo = useCookie(AUTH_COOKIE_USER_INFO);
+  const userInfo = useLocalStorage(LS_USER_INFO, {});
   const expiredDate = useCookie(AUTH_COOKIE_EXPIRED_AT);
 
-  const getUser = (data: Record<string, any>) => {
+  const getUser = (data?: Record<string, any>) => {
     // const { data: loginRes, error } = await useFetch('/api/session');
-    useLocalStorage(AUTH_STATE_USER_NAME, data?.user);
+    userInfo.value = data?.user;
   };
 
   const clearToken = () => {
     // STEP 1: Clear session
     authCookie.value = '';
-    userInfo.value = '';
+    userInfo.value = {};
     expiredDate.value = '';
     authStore.setToken(undefined);
     authStore.setStatus(AuthStatus.UNAUTH);
@@ -52,7 +52,8 @@ export default function () {
       // });
 
       console.log('[USEAPPAUTH]', loginRes);
-    } catch (error) {
+    }
+    catch (error) {
       console.log('[USEAPPAUTH]', { error });
       authStore.setStatus(AuthStatus.UNAUTH);
       throw error;
@@ -61,6 +62,7 @@ export default function () {
     // STEP 1: Set session
     const { data } = loginRes;
     setToken(data?.token);
+    expiredDate.value = data?.expiredAt;
     // STEP 2: Get session data
     await getUser(data);
 
@@ -74,7 +76,7 @@ export default function () {
     clearToken();
   };
 
-  const verifyToken = async (token) => {
+  const verifyToken = async (token?: string) => {
     const authStore = useAppAuthStore();
 
     const { data, error } = await useFetch('/api/verify', {
@@ -94,6 +96,8 @@ export default function () {
     // update token if it has changed
     else if (authStore.token !== token) {
       setToken(token);
+      const exp = data.value?.exp || 0;
+      expiredDate.value = (exp * 1000).toString();
 
       // Update session data
       getUser();
@@ -104,20 +108,12 @@ export default function () {
   };
 
   const isAuthenticated = () => {
-    try {
-      if (!userInfo?.value) {
-        return false;
-      }
-
-      if (!userInfo?.value || expiredDate?.value < new Date().getTime()) {
-        return false;
-      }
-    }
-    catch (error) {
+    if (!userInfo.value || !expiredDate.value) {
       return false;
     }
 
-    return true;
+    const isTokenExpired = Number(expiredDate.value) < Date.now();
+    return !isTokenExpired;
   };
 
   return { signIn, signOut, verifyToken, setToken, isAuthenticated };
