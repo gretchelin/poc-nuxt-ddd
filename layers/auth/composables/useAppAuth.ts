@@ -15,13 +15,13 @@ export default function () {
 
   const getUser = (data?: Record<string, any>) => {
     // const { data: loginRes, error } = await useFetch('/api/session');
-    useLocalStorage(LS_USER_INFO, data?.user);
+    userInfo.value = data?.user;
   };
 
   const clearToken = () => {
     // STEP 1: Clear session
     authCookie.value = '';
-    userInfo.value = '';
+    userInfo.value = {};
     expiredDate.value = '';
     authStore.setToken(undefined);
     authStore.setStatus(AuthStatus.UNAUTH);
