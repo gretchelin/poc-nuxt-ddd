@@ -67,7 +67,7 @@
               <UIButton
                 color="secondary"
                 size="small"
-                @click="handleCancel"
+                @click="handleBack"
               >
                 Cancel
               </UIButton>
