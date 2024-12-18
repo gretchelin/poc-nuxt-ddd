@@ -68,15 +68,17 @@ interface IProps {
   id: string;
   placeholder: string;
   isAdvanced: boolean;
-  handleSearch: () => void;
-  handleApply: () => void;
-  handleReset: () => void;
 }
 
 const props = withDefaults(defineProps<IProps>(), {
   isAdvanced: false,
   placeholder: '',
 });
+
+// Define emits for actions
+const emit = defineEmits<{
+  (e: 'search' | 'apply' | 'reset', payload?: any): void;
+}>();
 
 const isFilterVisible = ref(false);
 
@@ -85,21 +87,16 @@ const toggleFilter = () => {
 };
 
 const handleSearch = (e: any) => {
-  if (props.handleSearch) {
-    props.handleSearch(e.target.value);
-  }
+  emit('search', e.target.value);
 };
 
 const handleReset = () => {
-  if (props.handleReset) {
-    props.handleReset();
-  }
+  emit('reset');
 };
 
 const handleApply = () => {
-  if (props.handleApply) {
-    props.handleApply();
-  }
+  emit('apply');
+  toggleFilter();
 };
 </script>
 
