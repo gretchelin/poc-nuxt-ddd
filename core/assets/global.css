@@ -31,6 +31,8 @@
   --color-secondary-950: #020617;
 
   --color-shadow: #0000000d;
+
+  --color-brand-primary: #e2fef7;
 }
 
 @layer components {
@@ -44,6 +46,10 @@
 
   .bg-secondary {
     @apply bg-secondary-25 hover:bg-gray-50 focus:bg-gray-100;
+  }
+
+  .bg-brand-primary {
+    background: var(--color-brand-primary);
   }
 
   .bg-brand-solid {

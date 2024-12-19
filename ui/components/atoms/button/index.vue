@@ -70,7 +70,6 @@ const iconClass = computed(() => {
 const handleClick = () => {
   if (!isDisabled.value && !props.loading) {
     // Emit click event to parent
-    console.log('Button clicked');
   }
 };
 </script>
