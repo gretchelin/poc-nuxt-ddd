@@ -8,7 +8,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
   }
 
   if (!auth.isAuthenticated()) {
-    window.location.href = '/pages/login'
+    window.location.href = '/pages/login';
   }
-
 });

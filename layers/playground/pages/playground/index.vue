@@ -3,14 +3,38 @@
     <h1 class="mb-4  border-b pb-2 font-bold text-2xl">
       This is Playground
     </h1>
-    <UIButton color="primary">
-      Ini UIButton
+    <UIButton
+      color="primary"
+      :icon="true"
+    >
+      <template #prepend>
+        <Icon
+          name="uil-pen"
+          width="25"
+          height="20"
+          mode="svg"
+          class="text-white"
+        />
+      </template>
+      UI Button
     </UIButton>
     <UIButton color="secondary">
       Ini UIButton
     </UIButton>
-    <UIButton color="info">
-      Ini UIButton
+    <UIButton
+      color="info"
+      :loading="true"
+    >
+      <template #loading>
+        <Icon
+          name="uil-spinner"
+          width="20"
+          height="20"
+          mode="svg"
+          class="animate-spin"
+        />
+      </template>
+      Loading
     </UIButton>
     <UIButton color="warning">
       Ini UIButton
@@ -33,6 +57,17 @@
       Cancel fetch
     </button>
 
+    <UIBreadcrumb
+      title="Document"
+      :items="breadcrumbs"
+    />
+
+    <UIDatatable
+      :headers="headers"
+      :rows="rows"
+    />
+
+    <hr>
     <div>
       Page:
       <ul class="list-none flex gap-2 flex-wrap">
@@ -104,6 +139,8 @@
 import { useQueryClient, useQuery } from '@tanstack/vue-query';
 import EntryCard from '#playground/components/EntryCard.vue';
 import UIButton from '#ui/components/atoms/button';
+import UIBreadcrumb from '#ui/components/atoms/breadcrumb';
+import UIDatatable from '#ui/components/molecules/datatable';
 import { usePlaygroundStore } from '#playground/stores/playground';
 
 // Page Setup
@@ -119,6 +156,22 @@ const itemPerPage = ref(20);
 const pageTotal = ref(1);
 const total = ref(0);
 const playgroundStore = usePlaygroundStore();
+const breadcrumbs = [
+  { text: 'Learning Content', href: '' },
+  { text: 'Document', href: '/document', active: true },
+];
+const headers = [
+  { label: 'Name', key: 'name' },
+  { label: 'Age', key: 'age' },
+  { label: 'Country', key: 'country' },
+];
+
+const rows = [
+  { name: 'John Doe', age: 28, country: 'USA' },
+  { name: 'Jane Smith', age: 34, country: 'Canada' },
+  { name: 'Sam Johnson', age: 40, country: 'UK' },
+  { name: 'Anna Lee', age: 22, country: 'Australia' },
+];
 
 // Computed
 const itemRange = computed(() => {

@@ -30,14 +30,15 @@ export default defineNuxtPlugin(async () => {
   if (cookie.value) {
     // set theme
     if (document) {
+      // TODO: Add function generating colors
       // set color range
-      const colorRange = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+      // const colorRange = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 
       // set color
-      colorRange.forEach((code) => {
-        document.documentElement.style.setProperty(`--color-primary-${code}`, cookie.value?.colorPrimary);
-        document.documentElement.style.setProperty(`--color-secondary-${code}`, cookie.value?.colorSecondary);
-      });
+      // colorRange.forEach((code) => {
+      //   document.documentElement.style.setProperty(`--color-primary-${code}`, cookie.value?.colorPrimary);
+      //   document.documentElement.style.setProperty(`--color-secondary-${code}`, cookie.value?.colorSecondary);
+      // });
     }
   }
 });

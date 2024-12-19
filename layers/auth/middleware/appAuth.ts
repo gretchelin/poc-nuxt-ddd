@@ -51,7 +51,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // we throw user to error page instead
   else {
     // get token passed from parent and set it
-    const tokenCookie = useCookie('token');
+    const tokenCookie = useCookie(AUTH_COOKIE_NAME);
     const res = await auth.verifyToken(tokenCookie?.value);
 
     if (!res) {

@@ -1,8 +1,11 @@
-export const AUTH_COOKIE_NAME = '__nxLgnTkn';
-export const AUTH_STATE_CHANGE_NAME = '__nxSt';
-export const AUTH_STATE_USER_NAME = '__nxStU';
+// Cookies
+export const AUTH_COOKIE_NAME = '__mdlath';
+export const AUTH_COOKIE_SSO = '__mdlsso';
+export const AUTH_COOKIE_EXPIRED_AT = '__mdlexp';
 
-export const AUTH_COOKIE_TOKEN = 'token'
-export const AUTH_COOKIE_USER_INFO = 'user_info'
-export const AUTH_COOKIE_ACCESS_CONTROL = 'access_control'
-export const AUTH_COOKIE_EXPIRED_AT = 'expired_at'
+// Local Storage CMS V2
+export const LS_AUTH_STATE_CHANGE_NAME = '__mdlSt';
+
+// Local Storage CMS V1
+export const LS_USER_INFO = 'userInfo';
+export const LS_ACCESS_CONTROL = 'accessControl';

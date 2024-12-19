@@ -12,8 +12,7 @@
     "preview": "NODE_OPTIONS='--import ./core/public/instrument.server.mjs' nuxt preview",
     "start": "node --import .output/public/instrument.server.mjs .output/server/index.mjs",
     "postinstall": "nuxt prepare",
-    "prepare": "husky",
-    "storybook": "storybook dev -p 6006"
+    "prepare": "husky"
   },
   "dependencies": {
     "@iconify/json": "^2.2.247",
@@ -28,11 +27,15 @@
     "@vee-validate/yup": "^4.13.2",
     "@vueuse/core": "^11.0.3",
     "@vueuse/nuxt": "^11.0.3",
+    "datatables.net-vue3": "^3.0.2",
     "dayjs": "^1.11.13",
     "floating-vue": "^5.2.2",
     "maska": "^3.0.2",
     "nuxt": "^3.13.1",
+    "pdfjs-dist": "^4.9.155",
+    "sweetalert2": "^11.14.5",
     "vue": "latest",
+    "vue-pdf-embed": "^2.1.1",
     "yup": "^1.4.0"
   },
   "devDependencies": {
@@ -51,18 +54,7 @@
     "playwright-core": "^1.47.1",
     "typescript": "^5.5.4",
     "vitest": "^2.1.1",
-    "vue-tsc": "^2.1.4",
-    "storybook": "8.0.8",
-    "@types/node": "^18.17.5",
-    "@storybook/vue3": "8.0.8",
-    "@storybook-vue/nuxt": "0.2.6",
-    "@nuxtjs/storybook": "7.0.2",
-    "@storybook/addon-links": "8.0.8",
-    "@storybook/builder-vite": "8.0.8",
-    "@storybook/addon-essentials": "8.0.8",
-    "@storybook/addon-interactions": "8.0.8",
-    "@storybook/test": "8.0.8",
-    "@storybook/blocks": "8.0.8"
+    "vue-tsc": "^2.1.4"
   },
   "lint-staged": {
     "*.vue": "npm run lint:fix",

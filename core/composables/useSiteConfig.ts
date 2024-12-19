@@ -1,5 +1,5 @@
 export default function () {
-  const COOKIE_KEY = 'orgConfigs';
+  const COOKIE_KEY = 'orgConfigs'; // naming same with CMS V1
   const cookie = useCookie(COOKIE_KEY);
 
   const logoImg = computed(() => cookie.value?.url_logo);
