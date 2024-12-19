@@ -31,6 +31,8 @@
     "floating-vue": "^5.2.2",
     "maska": "^3.0.2",
     "nuxt": "^3.13.1",
+    "pdfjs-dist": "^4.9.155",
+    "sweetalert2": "^11.14.5",
     "vue": "latest",
     "yup": "^1.4.0"
   },
