@@ -235,4 +235,8 @@ export default defineNuxtConfig({
       pages.push(...embedRoutes);
     },
   },
+
+  build: {
+    transpile: ['@vuepic/vue-datepicker'],
+  },
 });
