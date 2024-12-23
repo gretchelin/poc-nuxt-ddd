@@ -45,25 +45,39 @@
         </div>
       </div>
 
-      <div class="mb-6">
-        <div class="flex items-center space-x-4">
-          <input
-            type="text"
-            placeholder="Search by title or created by"
-            class="px-4 py-2 border border-gray-300 rounded-md w-full"
-          >
-          <UIButton
-
-            color="secondary"
-            class="text-sm text-gray-500"
-          >
-            <img
-              src="public/img/icons/filter.svg"
-              alt="filter"
-            >
-            Filter
-          </UIButton>
-        </div>
+      <div class="mb-6 relative">
+        <UIFilter
+          placeholder="Search by title or created by"
+          :is-advanced="true"
+          @search="handleSearch"
+          @apply="handleApply"
+          @reset="handleReset"
+        >
+          <template #advanced-filter>
+            <div class="flex flex-col space-y-2">
+              <div class="text-gray-700 font-bold">
+                Date
+              </div>
+              <div class="flex space-x-2 items-center">
+                <VueDatePicker
+                  ref="date1"
+                  v-model="startDate"
+                  auto-apply
+                  :enable-time-picker="false"
+                  :format="format"
+                />
+                <span class="text-sm text-gray-500">to</span>
+                <VueDatePicker
+                  ref="date2"
+                  v-model="endDate"
+                  auto-apply
+                  :enable-time-picker="false"
+                  :format="format"
+                />
+              </div>
+            </div>
+          </template>
+        </UIFilter>
       </div>
 
       <div
@@ -108,11 +122,15 @@
 <script setup lang="ts">
 import { useQueryClient, useQuery, useMutation } from '@tanstack/vue-query';
 import dayjs from 'dayjs';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import type { DatePickerInstance } from '@vuepic/vue-datepicker';
 import { getDocumentList } from '#document/api/document.ts';
 import UIButton from '#ui/components/atoms/button';
 import UIBreadcrumb from '#ui/components/atoms/breadcrumb';
 import UIDatatable from '#ui/components/molecules/datatable';
+import UIFilter from '#ui/components/molecules/filter';
 import { deleteDocument } from '~/layers/document/api/document';
+import '@vuepic/vue-datepicker/dist/main.css';
 
 // Page Setup
 definePageMeta({
@@ -121,17 +139,18 @@ definePageMeta({
 });
 
 // Data
-const page = ref(10);
+const date1 = ref<DatePickerInstance>(null);
+const date2 = ref<DatePickerInstance>(null);
+const startDate = ref('');
+const endDate = ref('');
 const itemPerPage = ref(10);
 const pageTotal = ref(1);
 const total = ref(0);
 const currentPage = ref(1);
-const itemsPerPageOptions = [10, 20, 50, 100];
 const breadcrumbs = [
   { text: 'Learning Content', href: '' },
-  { text: 'Document', href: '/document', active: true },
+  { text: 'Document', href: '/document/pdf', active: true },
 ];
-const queryClient = useQueryClient();
 const route = useRoute();
 const type = route?.params?.type;
 const router = useRouter();
@@ -163,7 +182,7 @@ const params = ref({
 
 // Fetch
 const { isLoading, data, refetch } = useQuery({
-  queryKey: ['document-list-get', itemPerPage, currentPage],
+  queryKey: ['document-list-get', itemPerPage, currentPage, pageTotal, total, params],
   queryFn: async () => {
     const { data } = await getDocumentList(params.value);
 
@@ -175,11 +194,23 @@ const { isLoading, data, refetch } = useQuery({
   },
 });
 
-const setPage = (page: number) => {
-  if (page > 0 && page <= pageTotal.value) {
-    currentPage.value = page;
-    params.value.page = page;
+const handleSearch = (value: string) => {
+  params.value.keyword = value;
+};
+
+const handleApply = () => {
+  params.value.start_date = dayjs(startDate.value).format('YYYY-MM-DD');
+  params.value.end_date = dayjs(endDate.value).format('YYYY-MM-DD');
+};
+
+const handleReset = () => {
+  delete params.value.start_date;
+  delete params.value.end_date;
+  if (date1.value && date2.value) {
+    date1.value.clearValue();
+    date2.value.clearValue();
   }
+  refetch();
 };
 
 const handleSetCurrentPage = (page: number) => {
@@ -242,5 +273,9 @@ const handleDelete = (row: any, index: number) => {
       handleDeleteDocument(row.id);
     }
   });
+};
+
+const format = (date) => {
+  return dayjs(date).format('DD MMM YYYY');
 };
 </script>

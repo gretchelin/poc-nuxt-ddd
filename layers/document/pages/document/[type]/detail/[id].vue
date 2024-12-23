@@ -22,7 +22,7 @@
         />
       </div>
 
-      <div class="flex justify-between gap-4">
+      <div class="flex justify-between">
         <div class="flex flex-col gap-4">
           <h3 class="font-semibold">
             General
