@@ -118,7 +118,7 @@
     <div class="mt-6 flex justify-between">
       <slot
         name="pagination"
-        :curren-page="currentPage"
+        :current-page="currentPage"
         :total-pages="totalPages"
         :set-page="setPage"
         :set-items-per-page="setItemsPerPage"
@@ -143,27 +143,54 @@
 
         <div class="flex justify-between items-center">
           <span
-            :disabled="page?.value === 1"
+            :disabled="currentPage === 1"
             class="text-gray-400 px-4 py-2 rounded-md"
             @click="setPage(currentPage - 1)"
           >
             &lt; Previous
           </span>
-          <div class="flex space-x-2">
+          <!-- Page Numbers -->
+          <div class="flex items-center space-x-1">
             <button
-              v-for="val in totalPages"
-              :key="val"
+              v-if="currentPage > 3"
+              class="px-3 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300"
               :class="[
-                +currentPage === +val ? 'bg-teal-500 text-white' : 'text-gray-700',
+                +currentPage === 1 ? 'bg-teal-500 text-white' : 'text-gray-700',
                 'px-4 py-2 rounded-md',
               ]"
-              @click="setPage(val)"
+              @click="setPage(1)"
             >
-              {{ val }}
+              1
+            </button>
+            <span v-if="currentPage > 3">...</span>
+
+            <button
+              v-for="page in pageNumbers"
+              :key="page"
+              :class="[
+                +currentPage === +page ? 'bg-teal-500 text-white' : 'text-gray-700',
+                'px-4 py-2 rounded-md',
+              ]"
+              @click="setPage(page)"
+            >
+              {{ page }}
+            </button>
+
+            <span v-if="currentPage < totalPages - 2">...</span>
+
+            <button
+              v-if="currentPage < totalPages - 2"
+              :class="[
+                +currentPage === +totalPages ? 'bg-teal-500 text-white' : 'text-gray-700',
+                'px-4 py-2 rounded-md',
+              ]"
+              @click="setPage(totalPages)"
+            >
+              {{ totalPages }}
             </button>
           </div>
           <span
-            :disabled="page?.value === totalPages"
+            :disabled="currentPage === totalPages"
             class="text-teal-500 px-4 py-2 rounded-md"
             @click="setPage(currentPage + 1)"
           >
@@ -263,8 +290,19 @@ const itemRange = computed(() => {
   return `${(currentPage.value - 1) * itemsPerPage.value + 1} - ${Math.min(currentPage.value * itemsPerPage.value, totalData.value)} of ${totalData.value}`;
 });
 
+const pageNumbers = computed(() => {
+  const pages = [];
+  const start = Math.max(1, currentPage.value - 2);
+  const end = Math.min(totalPages.value, currentPage.value + 2);
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
+
 const setPage = (page: number) => {
-  if (page > 0 && page <= props.totalPages) {
+  if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
   }
   if (props.setCurrentPage) {
