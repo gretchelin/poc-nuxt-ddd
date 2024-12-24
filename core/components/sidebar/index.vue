@@ -90,7 +90,7 @@
           <div
             v-for="(childMenu, index) in selectedChildMenuItems.menuList"
             :key="index"
-            class=" w-56"
+            :class="!isSidebarVisible ? 'even:border-b-2 even:border-gray-200 even:pb-4 odd:pt-4 w-7' : 'w-56'"
           >
             <div
               v-show="isSidebarVisible"
