@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 
-import Breadcrumb from './Breadcrumb.vue';
+import Breadcrumb from './index.vue';
 
 const meta = {
   title: 'Design System/Breadcrumb',
