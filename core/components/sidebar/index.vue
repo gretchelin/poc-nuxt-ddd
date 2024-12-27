@@ -199,6 +199,19 @@ const props = defineProps({
   },
 });
 
+onMounted(() => window.addEventListener('resize', onResize, true));
+
+const onResize = (event) => {
+  if (event.target.innerWidth <= 768) {
+    isSidebarVisible.value = false;
+    props.handleCollapseSidebar(true);
+  }
+  else {
+    isSidebarVisible.value = true;
+    props.handleCollapseSidebar(false);
+  }
+};
+
 // Toggle dropdown visibility
 const toggleDropdown = () => {
   isDropdownVisible.value = !isDropdownVisible.value;
