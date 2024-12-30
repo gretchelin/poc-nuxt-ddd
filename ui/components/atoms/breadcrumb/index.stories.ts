@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 
-import Breadcrumb from './index.vue';
+import Breadcrumb from './Breadcrumb.vue';
 
 const meta = {
   title: 'Design System/Breadcrumb',
@@ -20,13 +20,5 @@ export const Default: Story = {
       { href: '/products/electronics', text: 'Electronics', active: true },
     ],
   },
-  render(args) {
-    return {
-      components: { Breadcrumb },
-      setup() {
-        return { args };
-      },
-      template: '<div><Breadcrumb :title="args.title" :items="args.items" /></div>',
-    };
-  },
+
 };

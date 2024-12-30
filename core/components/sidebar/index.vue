@@ -111,12 +111,13 @@
                   <Icon
                     :name="item.icon"
                     width="18"
-                    class="text-gray-400"
+                    :class="activeSubmenu === item.name.toLowerCase() ? 'text-teal-600' : 'text-gray-400'"
                     mode="svg"
                   />
                   <span
                     v-show="isSidebarVisible"
                     class="text-sm flex justify-between items-center"
+                    :class="activeSubmenu === item.name.toLowerCase() ? 'text-teal-600' : 'text-gray-900'"
                   >{{ item.name }}
                   </span>
                 </div>
@@ -138,18 +139,21 @@
       </div>
       <div
         v-show="isDropdownVisible"
-        class="absolute left-12 bottom-2 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md z-10"
+        class="absolute left-12 bottom-2 mt-2 w-72 bg-white border border-gray-200 shadow-lg rounded-md z-10"
       >
         <div class="text-gray-600 text-sm">
-          <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+          <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center space-x-2">
             <div class="flex items-center space-x-2">
               <img
-                src="public/img/avatar.png"
+                :src="userInfo?.picture ? userInfo?.picture : avatar"
                 alt="Avatar"
                 class="cursor-pointer"
                 @click="toggleDropdown"
               >
-              <span>Alikha Kalistha <span class="text-xs text-gray-300">akhila@gmai.id</span></span>
+              <span>{{ userInfo?.full_name }} <span class="text-xs text-gray-300">{{ userInfo?.email }}</span></span>
+            </div>
+            <div class="p-1 bg-red-200 text-red-600 rounded text-sm">
+              Expert
             </div>
           </div>
           <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
@@ -161,7 +165,7 @@
                 height="18"
                 mode="svg"
               />
-              <span>Frontpage <span class="text-xs text-gray-300">mydigilearn.id</span></span>
+              <span>Frontpage <span class="text-xs text-gray-300 ml-1">mydigilearn.id</span></span>
             </div>
           </div>
           <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
@@ -184,7 +188,9 @@
 
 <script setup>
 import { ref, defineProps } from 'vue';
+import avatar from 'public/img/avatar.png';
 import { parentMenuItems, childMenuItems } from '~/core/config/constant';
+import { LS_USER_INFO, LS_ACTIVE_MENU } from '~/layers/auth/config/constants';
 
 // Sidebar visibility and menu states
 const parentMenu = ref(parentMenuItems);
@@ -192,14 +198,29 @@ const isSidebarVisible = ref(true);
 const isDropdownVisible = ref(false);
 const selectedChildMenuItems = ref(childMenuItems.find(menu => menu.parentMenu === 'dashboard'));
 const router = useRouter();
+const route = useRoute();
 const props = defineProps({
   handleCollapseSidebar: {
     type: Function,
     required: true,
   },
 });
+const userInfo = useLocalStorage(LS_USER_INFO, {});
+const activeParentMenu = useLocalStorage(LS_ACTIVE_MENU, '');
+const activeSubmenu = route.path.split('/')[1];
 
-onMounted(() => window.addEventListener('resize', onResize, true));
+onMounted(() => {
+  window.addEventListener('resize', onResize, true);
+
+  setActiveParentMenu(activeParentMenu.value);
+});
+
+const setActiveParentMenu = (item) => {
+  parentMenu.value.map(parent => parent.active = false);
+  const selectedParentMenu = parentMenu.value.find(parent => parent.name === item);
+  selectedParentMenu.active = true;
+  selectedChildMenuItems.value = childMenuItems.find(menu => menu.parentMenu === item);
+};
 
 const onResize = (event) => {
   if (event.target.innerWidth <= 768) {
@@ -219,10 +240,8 @@ const toggleDropdown = () => {
 
 // Handle click event to toggle active state or do something when clicked
 const handleClickParentMenu = (item) => {
-  parentMenu.value.map(parent => parent.active = false);
-  const selectedParentMenu = parentMenu.value.find(parent => parent.name === item.name);
-  selectedParentMenu.active = true;
-  selectedChildMenuItems.value = childMenuItems.find(menu => menu.parentMenu === item.name);
+  setActiveParentMenu(item.name);
+  window.localStorage.setItem(LS_ACTIVE_MENU, item.name);
 };
 
 // Toggle the sidebar visibility
