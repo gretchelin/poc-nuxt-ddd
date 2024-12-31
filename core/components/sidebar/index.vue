@@ -5,21 +5,20 @@
       <div class="border-b-2 border-gray-100">
         <div class="flex items-center space-x-3 m-4">
           <img
-            src="public/img/logo/logo.svg"
+            :src="urlFavicon ? urlFavicon : logo"
             alt="myDigiLearn"
+            class="w-12"
             @click="toggleSidebar"
           >
           <div
             v-show="isSidebarVisible"
             class="flex flex-col"
           >
-            <img
-              :src="urlFavicon ? urlFavicon : 'public/img/logo/logo.svg'"
-              alt="myDigiLearn"
-              @click="toggleSidebar"
-            >
+            <div class="text-xl font-semibold">
+              {{ orgTitle ? orgTitle : 'myDigiLearn' }}
+            </div>
             <div class="text-xs text-gray-400 w-44">
-              {{ orgTitle ? orgTitle : 'Content Management System' }}
+              Content Management System
             </div>
           </div>
           <div
@@ -191,6 +190,7 @@
 <script setup>
 import { ref, defineProps } from 'vue';
 import avatar from 'public/img/avatar.png';
+import logo from 'public/img/logo/logo.svg';
 import { parentMenuItems, childMenuItems } from '~/core/config/constant';
 import { LS_USER_INFO, LS_ACTIVE_MENU, COOKIE_ORG_CONFIGS } from '~/layers/auth/config/constants';
 
