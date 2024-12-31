@@ -1,9 +1,10 @@
-import type { Meta, Story } from '@storybook/vue3';
+import type { Meta, StoryFn } from '@nuxtjs/storybook';
 import Button from './index.vue';
 
 export default {
   title: 'Design System/Button',
   component: Button,
+  tags: ['autodocs'],
   argTypes: {
     size: {
       control: {
@@ -45,7 +46,7 @@ export default {
   },
 } as Meta<typeof Button>;
 
-const Template: Story<typeof Button> = args => ({
+const Template: StoryFn<typeof Button> = args => ({
   components: { Button },
   setup() {
     return { args };
@@ -61,7 +62,6 @@ Default.args = {
   loading: false,
   disabled: false,
   fullWidth: false,
-  icon: false,
 };
 
 export const Small = Template.bind({});
@@ -72,7 +72,6 @@ Small.args = {
   loading: false,
   disabled: false,
   fullWidth: false,
-  icon: false,
 };
 
 export const Large = Template.bind({});
@@ -83,7 +82,6 @@ Large.args = {
   loading: false,
   disabled: false,
   fullWidth: false,
-  icon: false,
 };
 
 export const Loading = Template.bind({});
@@ -94,7 +92,6 @@ Loading.args = {
   loading: true,
   disabled: false,
   fullWidth: false,
-  icon: false,
 };
 
 export const Disabled = Template.bind({});
@@ -116,7 +113,6 @@ WithIcon.args = {
   loading: false,
   disabled: false,
   fullWidth: false,
-  icon: true,
 };
 
 export const FullWidth = Template.bind({});
@@ -127,7 +123,6 @@ FullWidth.args = {
   loading: false,
   disabled: false,
   fullWidth: true,
-  icon: false,
 };
 
 export const Outlined = Template.bind({});
@@ -160,5 +155,4 @@ Transparent.args = {
   loading: false,
   disabled: false,
   fullWidth: false,
-  icon: false,
 };

@@ -1,76 +1,11 @@
 <template>
   <div class="base-layout--full">
     <div class="flex flex-1 overflow-hidden">
+      <Sidebar :handle-collapse-sidebar="handleCollapseSidebar" />
       <div
-        data-qa="sidebar"
-        class="sidebar flex flex-col space-y-4 border-r-2 border-gray-100"
+        class="body"
+        :class="isCollapseSidebar ? 'ml-32': 'ml-80'"
       >
-        <div class="border-b-2 border-gray-100">
-          <div class="flex items-center space-x-3 mb-6 mx-2 mt-4">
-            <img
-              src="public/img/logo/logo.svg"
-              alt="myDigiLearn"
-            >
-            <div class="flex flex-col">
-              <div class="text-xl font-semibold">
-                myDigiLearn
-              </div>
-              <div class="text-xs text-gray-400">
-                Content Management System
-              </div>
-            </div>
-            <div
-              class="border p-1 rounded cursor-pointer"
-              data-qa="collapse-navbar"
-            >
-              <img
-                src="public/img/icons/arrow-left.svg"
-                alt="Collapse Navbar"
-              >
-            </div>
-          </div>
-        </div>
-
-        <div class="flex h-full space-x-5">
-          <div class="navbar-parent">
-            <img
-              src="public/img/icons/home.svg"
-              alt="Home"
-            >
-
-            <img
-              src="public/img/avatar.png"
-              alt="Avatar"
-            >
-          </div>
-
-          <div>
-            <div class="text-sm font-semibold text-gray-600">
-              Learning Content
-            </div>
-            <div class="space-y-2">
-              <div class="flex items-center space-x-2 text-gray-700">
-                <i class="fas fa-video" />
-                <span>Video</span>
-              </div>
-              <div class="flex items-center space-x-2 text-gray-700">
-                <i class="fas fa-microphone" />
-                <span>Audio</span>
-              </div>
-              <div class="flex items-center space-x-2 text-gray-700">
-                <i class="fas fa-file-alt" />
-                <span>Article</span>
-              </div>
-              <div class="flex items-center space-x-2 text-teal-500">
-                <i class="fas fa-file" />
-                <span>Document</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="body">
         <main
           data-qa="body"
           class="main"
@@ -89,11 +24,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  setup() {
-    return {};
-  },
+<script setup lang="ts">
+import Sidebar from '~/components/sidebar';
+
+const isCollapseSidebar = ref(false);
+
+const handleCollapseSidebar = (isCollapse: boolean) => {
+  isCollapseSidebar.value = isCollapse;
 };
 </script>
 
@@ -110,18 +47,9 @@ export default {
   @apply flex flex-col w-full h-full;
 }
 
-.sidebar {
-  @apply min-h-full overflow-auto p-2;
-  width: 320px;
-  background: bg-primary;
-}
-
-.navbar-parent {
-  @apply border-r-2 border-gray-100 pr-2 h-full flex flex-col justify-between;
-}
-
 .body {
   @apply flex flex-col flex-1 min-h-full overflow-auto p-4;
+  transition: width 0.3s ease-in-out;
 }
 
 .main {

@@ -1,32 +1,24 @@
-import type { Meta, StoryFn } from '@nuxtjs/storybook';
-import Breadcrumb from './index.vue';
+import type { Meta, StoryObj } from '@storybook/vue3';
 
-export default {
+import Breadcrumb from './Breadcrumb.vue';
+
+const meta = {
   title: 'Design System/Breadcrumb',
   component: Breadcrumb,
-  argTypes: {
-    title: { control: 'text' },
-    items: {
-      control: 'array',
-      description: 'Breadcrumb items as an array of objects containing href and text',
-    },
-  },
-} as Meta<typeof Breadcrumb>;
+  tags: ['autodocs'],
+} satisfies Meta<typeof Breadcrumb>;
 
-const Template: StoryFn<typeof Breadcrumb> = args => ({
-  components: { Breadcrumb },
-  setup() {
-    return { args };
-  },
-  template: '<Breadcrumb title="args.title" :items="args.items" />',
-});
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
-Default.args = {
-  title: 'Page Title',
-  items: [
-    { href: '/', text: 'Home' },
-    { href: '/products', text: 'Products' },
-    { href: '/products/electronics', text: 'Electronics', active: true },
-  ],
+export const Default: Story = {
+  args: {
+    title: 'Page Title',
+    items: [
+      { href: '/', text: 'Home' },
+      { href: '/products', text: 'Products' },
+      { href: '/products/electronics', text: 'Electronics', active: true },
+    ],
+  },
+
 };
