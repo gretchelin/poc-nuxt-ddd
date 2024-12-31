@@ -5,8 +5,9 @@
       <div class="border-b-2 border-gray-100">
         <div class="flex items-center space-x-3 m-4">
           <img
-            src="public/img/logo/logo.svg"
+            :src="urlFavicon ? urlFavicon : logo"
             alt="myDigiLearn"
+            class="w-12"
             @click="toggleSidebar"
           >
           <div
@@ -14,7 +15,7 @@
             class="flex flex-col"
           >
             <div class="text-xl font-semibold">
-              myDigiLearn
+              {{ orgTitle ? orgTitle : 'myDigiLearn' }}
             </div>
             <div class="text-xs text-gray-400 w-44">
               Content Management System
@@ -189,8 +190,9 @@
 <script setup>
 import { ref, defineProps } from 'vue';
 import avatar from 'public/img/avatar.png';
+import logo from 'public/img/logo/logo.svg';
 import { parentMenuItems, childMenuItems } from '~/core/config/constant';
-import { LS_USER_INFO, LS_ACTIVE_MENU } from '~/layers/auth/config/constants';
+import { LS_USER_INFO, LS_ACTIVE_MENU, COOKIE_ORG_CONFIGS } from '~/layers/auth/config/constants';
 
 // Sidebar visibility and menu states
 const parentMenu = ref(parentMenuItems);
@@ -206,8 +208,11 @@ const props = defineProps({
   },
 });
 const userInfo = useLocalStorage(LS_USER_INFO, {});
+const orgConfigs = useCookie(COOKIE_ORG_CONFIGS);
 const activeParentMenu = useLocalStorage(LS_ACTIVE_MENU, '');
 const activeSubmenu = route.path.split('/')[1];
+const urlFavicon = orgConfigs.value.url_favicon;
+const orgTitle = orgConfigs.value.title;
 
 onMounted(() => {
   window.addEventListener('resize', onResize, true);
@@ -217,9 +222,9 @@ onMounted(() => {
 
 const setActiveParentMenu = (item) => {
   parentMenu.value.map(parent => parent.active = false);
-  const selectedParentMenu = parentMenu.value.find(parent => parent.name === item);
+  const selectedParentMenu = parentMenu.value.find(parent => parent.name === item || 'dashboard');
   selectedParentMenu.active = true;
-  selectedChildMenuItems.value = childMenuItems.find(menu => menu.parentMenu === item);
+  selectedChildMenuItems.value = childMenuItems.find(menu => menu.parentMenu === item || 'dashborad');
 };
 
 const onResize = (event) => {
