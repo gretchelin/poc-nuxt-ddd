@@ -6,6 +6,7 @@
     "analyze:bundle": "nuxi analyze",
     "typecheck": "nuxi typecheck",
     "lint:fix": "eslint --fix",
+    "lint:config": "npx @eslint/config-inspector",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
