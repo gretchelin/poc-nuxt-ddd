@@ -29,9 +29,8 @@ export default defineNuxtConfig({
   ],
   eslint: {
     config: {
-      stylistic: {
-        semi: true,
-      },
+      standalone: false,
+      stylistic: true,
     },
   },
   // ========================================
@@ -222,17 +221,17 @@ export default defineNuxtConfig({
   // ========================================
 
   hooks: {
-    'pages:extend'(pages) {
+    'pages:extend': function (pages) {
       const embedRoutes = pages.map((page) => {
         return {
           name: `embed-${page.name}`,
           path: `/embed${page.path}`,
           file: page.file,
           children: page.children,
-        };
-      });
+        }
+      })
 
-      pages.push(...embedRoutes);
+      pages.push(...embedRoutes)
     },
   },
 
