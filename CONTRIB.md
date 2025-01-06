@@ -127,6 +127,8 @@ Otherwise, you can use regular `$fetch` or `useFetch` to connect to the api.
 
 > `$api` has token built-in in its request headers, so there is no need to manually added them when you make a request to internal backend. 
 
+Official guide regarding custom useFetch can be read [here](https://nuxt.com/docs/guide/recipes/custom-usefetch#custom-fetch).
+
 
 ## Testing: Setting ids for testing purposes
 
