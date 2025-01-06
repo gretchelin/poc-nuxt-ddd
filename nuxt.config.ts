@@ -100,6 +100,9 @@ export default defineNuxtConfig({
   // ========================================
 
   runtimeConfig: {
+    app: {
+      enableConsole: process.env.NUXT_ENABLE_CONSOLE,
+    },
     public: {
       enableMock: process.env.NUXT_PUBLIC_ENABLE_MOCK,
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL,
