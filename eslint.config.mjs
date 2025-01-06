@@ -4,9 +4,7 @@ import withNuxt from './.nuxt/eslint.config.mjs';
 
 export default withNuxt(
     antfu({
-        stylistic: {
-            semi: true
-        },
+        stylistic: true,
     }),
     {
         rules: {
@@ -33,7 +31,19 @@ export default withNuxt(
             "no-useless-return": "error",
             "curly": "error",
             "default-case": "error",
-            "default-case-last": "error"
+            "default-case-last": "error",
+            '@stylistic/semi': ["error", "always"], // requires semicolon at end of statement
+            'node/prefer-global/process': "off", // allow usage of process.env
+
+            // Deprecated since 8.53.0
+
+            // The rules below are superseded by `@stylistic/semi`,
+            // but may clash with stylistic rules if not disabled
+            "semi": "off",
+            "semi-spacing": "off",
+            "semi-style": "off",
+            "style/semi": "off", // this should be `semi-style`, but it seemed that there is also a `style/semi` --which handles the same stuff-- and will clash will stylistic rule
+            "no-extra-semi": "off",
         },
     }
 );
