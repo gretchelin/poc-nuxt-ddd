@@ -48,17 +48,18 @@ information regarding module-specific env variables, please refer to each module
 These envs are also available in [`.env.example`](./.env.example) from which you can conveniently copy to create
 local `.env` file.
 
-| Env Key                        | Default Value | Notes                                        |
-|--------------------------------|---------------|----------------------------------------------|
-| `NUXT_PUBLIC_ENABLE_MOCK`      |               | Enable mock for api using msw.js             |
-| `NUXT_APP_BASE_URL`            | `"/v2"`       | Base path for routes. ie. `/v2/landing-page` |
-| `NUXT_PUBLIC_AUTH_BASE_URL`    |               | Base API URL for auth stuff                  |
-| `NUXT_PUBLIC_API_BASE_URL`     |               | Base API URL                                 |
-| `NUXT_PUBLIC_STORAGE_BASE_URL` |               | Base API for file storage stuff              |
-| `NUXT_SENTRY_DSN`              |               | Sentry DSN                                   |
-| `NUXT_SENTRY_ORG`              |               | Sentry Organization                          |
-| `NUXT_SENTRY_PROJECT`          |               | Sentry Project ID                            |
-| `NUXT_SENTRY_TOKEN`            |               | Sentry Token                                 |
+| Env Key                        | Default Value | Notes                                         |
+|--------------------------------|---------------|-----------------------------------------------|
+| `NUXT_PUBLIC_ENABLE_MOCK`      |               | Enable mock for api using msw.js              |
+| `NUXT_ENABLE_CONSOLE`          |               | Enable `console.log` on non-`development` env |
+| `NUXT_APP_BASE_URL`            | `"/v2"`       | Base path for routes. ie. `/v2/landing-page`  |
+| `NUXT_PUBLIC_AUTH_BASE_URL`    |               | Base API URL for auth stuff                   |
+| `NUXT_PUBLIC_API_BASE_URL`     |               | Base API URL                                  |
+| `NUXT_PUBLIC_STORAGE_BASE_URL` |               | Base API for file storage stuff               |
+| `NUXT_SENTRY_DSN`              |               | Sentry DSN                                    |
+| `NUXT_SENTRY_ORG`              |               | Sentry Organization                           |
+| `NUXT_SENTRY_PROJECT`          |               | Sentry Project ID                             |
+| `NUXT_SENTRY_TOKEN`            |               | Sentry Token                                  |
 
 ### 3. Running the project
 
