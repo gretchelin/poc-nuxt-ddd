@@ -1,73 +1,74 @@
+<script setup lang="ts">
+import EntryCard from '#playground/components/EntryCard.vue';
+import { usePlaygroundStore } from '#playground/stores/playground';
+import { useQuery, useQueryClient } from '@tanstack/vue-query';
+
+// Page Setup
+definePageMeta({
+  layout: 'playground',
+  middleware: ['playground'],
+});
+
+// Data
+const queryClient = useQueryClient();
+const page = ref(1);
+const itemPerPage = ref(20);
+const pageTotal = ref(1);
+const total = ref(0);
+const playgroundStore = usePlaygroundStore();
+
+// Computed
+const itemRange = computed(() => {
+  return `${(page.value - 1) * itemPerPage.value || 1} - ${page.value * itemPerPage.value}`;
+});
+
+// Fetch
+const { isLoading, data } = useQuery({
+  queryKey: ['playground-list-get', itemPerPage, page],
+  queryFn: async ({ signal }) => {
+    const data = await $fetch('https://pokeapi.co/api/v2/pokemon', {
+      signal,
+      params: {
+        offset: (page.value - 1) * itemPerPage.value,
+        limit: itemPerPage.value,
+      },
+    });
+
+    total.value = data?.count;
+    pageTotal.value = Math.ceil(data?.count / 20) || 1;
+
+    return data?.results || [];
+  },
+  retry: 2,
+});
+
+// Methods
+function cancelFetch() {
+  queryClient.cancelQueries({ queryKey: ['playground-list-get'] });
+}
+
+// lifecycle
+onMounted(() => {
+  playgroundStore.$patch({
+    pageRef: 'Playground Landing Page',
+  });
+});
+</script>
+
 <template>
   <div class="space-y-4 p-2">
     <h1 class="mb-4  border-b pb-2 font-bold text-2xl">
       This is Playground
     </h1>
-    <UIButton
-      color="primary"
-      :icon="true"
-    >
-      <template #prepend>
-        <Icon
-          name="uil-pen"
-          width="25"
-          height="20"
-          mode="svg"
-          class="text-white"
-        />
-      </template>
-      UI Button
-    </UIButton>
-    <UIButton color="secondary">
-      Ini UIButton
-    </UIButton>
-    <UIButton
-      color="info"
-      :loading="true"
-    >
-      <template #loading>
-        <Icon
-          name="uil-spinner"
-          width="20"
-          height="20"
-          mode="svg"
-          class="animate-spin"
-        />
-      </template>
-      Loading
-    </UIButton>
-    <UIButton color="warning">
-      Ini UIButton
-    </UIButton>
-    <UIButton color="success">
-      Ini UIButton
-    </UIButton>
-    <UIButton
-      color="error"
-      variant="outlined"
-    >
-      Ini UIButton
-    </UIButton>
 
     <button
       type="button"
-      class="bg-secondary-300 inline-block border p-2 rounded hover:border-neutral-700"
+      class="inline-block border p-2 rounded hover:border-neutral-700"
       @click="cancelFetch"
     >
       Cancel fetch
     </button>
 
-    <UIBreadcrumb
-      title="Document"
-      :items="breadcrumbs"
-    />
-
-    <UIDatatable
-      :headers="headers"
-      :rows="rows"
-    />
-
-    <hr>
     <div>
       Page:
       <ul class="list-none flex gap-2 flex-wrap">
@@ -134,82 +135,6 @@
     </template>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useQueryClient, useQuery } from '@tanstack/vue-query';
-import EntryCard from '#playground/components/EntryCard.vue';
-import UIButton from '#ui/components/atoms/button';
-import UIBreadcrumb from '#ui/components/atoms/breadcrumb';
-import UIDatatable from '#ui/components/molecules/datatable';
-import { usePlaygroundStore } from '#playground/stores/playground';
-
-// Page Setup
-definePageMeta({
-  layout: 'full',
-  middleware: ['playground'],
-});
-
-// Data
-const queryClient = useQueryClient();
-const page = ref(1);
-const itemPerPage = ref(20);
-const pageTotal = ref(1);
-const total = ref(0);
-const playgroundStore = usePlaygroundStore();
-const breadcrumbs = [
-  { text: 'Learning Content', href: '' },
-  { text: 'Document', href: '/document', active: true },
-];
-const headers = [
-  { label: 'Name', key: 'name' },
-  { label: 'Age', key: 'age' },
-  { label: 'Country', key: 'country' },
-];
-
-const rows = [
-  { name: 'John Doe', age: 28, country: 'USA' },
-  { name: 'Jane Smith', age: 34, country: 'Canada' },
-  { name: 'Sam Johnson', age: 40, country: 'UK' },
-  { name: 'Anna Lee', age: 22, country: 'Australia' },
-];
-
-// Computed
-const itemRange = computed(() => {
-  return `${(page.value - 1) * itemPerPage.value || 1} - ${page.value * itemPerPage.value}`;
-});
-
-// Fetch
-const { isLoading, data } = useQuery({
-  queryKey: ['playground-list-get', itemPerPage, page],
-  queryFn: async ({ signal }) => {
-    const data = await $fetch('https://pokeapi.co/api/v2/pokemon', {
-      signal,
-      params: {
-        offset: (page.value - 1) * itemPerPage.value,
-        limit: itemPerPage.value,
-      },
-    });
-
-    total.value = data?.count;
-    pageTotal.value = Math.ceil(data?.count / 20) || 1;
-
-    return data?.results || [];
-  },
-  retry: 2,
-});
-
-// Methods
-const cancelFetch = () => {
-  queryClient.cancelQueries({ queryKey: ['playground-list-get'] });
-};
-
-// lifecycle
-onMounted(() => {
-  playgroundStore.$patch({
-    pageRef: 'Playground Landing Page',
-  });
-});
-</script>
 
 <style lang="postcss" scoped>
 
